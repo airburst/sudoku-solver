@@ -1,29 +1,41 @@
 // import Tesseract from "tesseract.js";
-import { useState } from "react";
-import { Image } from "image-js";
+// import { useState, useCallback, useEffect } from "react";
+// import { Image } from "image-js";
 import "./App.css";
-import PuzzleImage from "./puzzle.jpg";
+import Square from "./Square";
+// import PuzzleImage from "./puzzle.jpg";
 
-async function execute() {
-  let image = await Image.load(PuzzleImage);
-  console.log("🚀 ~ file: App.js ~ line 9 ~ execute ~ image", image);
+// async function execute() {
+//   let image = await Image.load(PuzzleImage);
 
-  const convertedImage = image
-    .grey() // convert the image to greyscale.
-    .resize({ width: 200 }) // resize the image, forcing a width of 200 pixels. The height is computed automatically to preserve the aspect ratio.
-    .rotate(30); // rotate the image clockwise by 30 degrees.
-  // return grey.save("puzzleConverted.png");
-  return convertedImage;
-}
+//   const convertedImage = await image.grey().resize({ width: 200 });
+//   // return grey.save("puzzleConverted.png");
+//   return convertedImage;
+// }
 
 function App() {
-  const [puzzleImage, setPuzzleImage] = useState(PuzzleImage);
+  // const [puzzleImage, setPuzzleImage] = useState(null);
+  // const [converted, setConverted] = useState(false);
+
   // Read an image (from camera in future)
-  execute()
-    .then((convertedImage) => console.log(convertedImage))
-    .catch(console.error);
 
   // Process image to grey scale and resize if > 1000px
+  // const convert = useCallback(() => {
+  //   execute()
+  //     .then((convertedImage) => {
+  //       convertedImage.src = "converted.jpg";
+  //       setPuzzleImage(convertedImage);
+  //     })
+  //     .catch(console.error);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!converted) {
+  //     convert();
+  //     setConverted(true);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // Remove horizontal and vertical lines
 
@@ -38,10 +50,27 @@ function App() {
 
   // Solve the puzzle
 
+  // Render the puzzle
+  const puzzleData = [
+    [6, 3, 0, 0, 0, 0, 0, 8, 1],
+    [0, 2, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 0, 1, 7, 4, 3, 0],
+    [0, 9, 6, 4, 0, 0, 5, 7, 0],
+    [0, 0, 0, 7, 6, 2, 0, 0, 0],
+    [0, 8, 0, 0, 0, 0, 6, 0, 0],
+    [0, 6, 0, 0, 2, 0, 0, 0, 0],
+    [3, 0, 9, 0, 0, 0, 0, 6, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 9],
+  ];
+
   return (
     <div className="App">
       <h1>Sudoku Solver</h1>
-      <img src={puzzleImage} alt="Sudoku puzzle" className="puzzle" />
+      <div className="puzzle">
+        {puzzleData.map((rowData, rowIndex) => (
+          <Square key={`row-${rowIndex}`} row={rowIndex} data={rowData} />
+        ))}
+      </div>
     </div>
   );
 }
