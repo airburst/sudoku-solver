@@ -1,8 +1,7 @@
 // import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
-import { useSelector, useDispatch } from "react-redux";
-import { setCellValue } from "./puzzleSlice";
+import { useSelector } from "react-redux";
 
 const StyledBoard = styled.div`
   flex-grow: 1;
@@ -21,8 +20,6 @@ const StyledBoard = styled.div`
 
 const PuzzleBoard = () => {
   const boardData = useSelector((state) => state.puzzle.board);
-  // const locked = useSelector((state) => state.puzzle.locked);
-  const dispatch = useDispatch();
 
   return (
     <StyledBoard>
@@ -33,11 +30,6 @@ const PuzzleBoard = () => {
             row={rowIndex}
             col={colIndex}
             data={cell}
-            setCellValue={(val) =>
-              dispatch(
-                setCellValue({ row: rowIndex, col: colIndex, value: val })
-              )
-            }
           />
         ))
       )}

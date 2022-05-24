@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleCellSelected } from "./puzzleSlice";
+import { toggleCellSelected, setCellValue } from "./puzzleSlice";
 
 const StyledCell = styled.div`
   position: relative;
@@ -35,7 +35,7 @@ const Content = styled.div`
   position: absolute;
 `;
 
-const Cell = ({ data, row = 0, col = 0, setCellValue }) => {
+const Cell = ({ data, row = 0, col = 0 }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
   // TODO: handle pencil marks
@@ -46,9 +46,12 @@ const Cell = ({ data, row = 0, col = 0, setCellValue }) => {
   const handleClickCell = () => {
     // if (!hasSetValue) {
     dispatch(toggleCellSelected({ row, col }));
-    setCellValue?.(9);
     // }
   };
+
+  // const setValue = (val) => {
+  //   dispatch(setCellValue({ row, col, value: val }));
+  // };
 
   return (
     <StyledCell
