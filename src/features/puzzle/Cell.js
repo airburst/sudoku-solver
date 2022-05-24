@@ -14,9 +14,9 @@ const StyledCell = styled.div`
 
   // Thick borders for (3x3) square edges
   border-top: ${({ row }) =>
-    row % 3 === 0 ? "3px solid black" : "1px solid black"};
+    row % 3 === 0 ? "4px solid black" : "1px solid black"};
   border-left: ${({ col }) =>
-    col % 3 === 0 ? "3px solid black" : "1px solid black"};
+    col % 3 === 0 ? "4px solid black" : "1px solid black"};
 
   color: ${({ hasSetValue }) =>
     hasSetValue ? "var(--fixed-color)" : "var(--guess-color)"};
@@ -43,18 +43,15 @@ const PencilMark = styled.div`
   padding-left: 2px;
 `;
 
-const Cell = ({ data, row = 0, col = 0, onKeyPress }) => {
+const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
-  // TODO: handle pencil marks
   const hasSetValue = data.val !== 0;
 
-  // TODO: emit selected event to store
-  // Selected cells are the targets for keyboard input
   const handleClickCell = () => {
-    // if (!hasSetValue) {
-    dispatch(toggleCellSelected({ row, col }));
-    // }
+    if (!hasSetValue) {
+      dispatch(toggleCellSelected({ row, col }));
+    }
   };
 
   // const setValue = (val) => {
@@ -71,7 +68,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyPress }) => {
       col={col}
       locked={locked}
       tabIndex={hasSetValue ? -1 : 1}
-      onKeyPress={onKeyPress}
+      onKeyDown={onKeyDown}
     >
       <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
       <Content>{data.val > 0 ? data.val : ""}</Content>

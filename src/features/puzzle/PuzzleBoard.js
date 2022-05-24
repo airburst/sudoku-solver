@@ -14,8 +14,8 @@ const StyledBoard = styled.div`
   grid-template-rows: repeat(9, auto);
   grid-template-columns: repeat(9, auto);
   max-width: 760px;
-  border-right: 3px solid black;
-  border-bottom: 3px solid black;
+  border-right: 4px solid black;
+  border-bottom: 4px solid black;
   margin-bottom: 1rem;
 
   @media (min-width: 760px) {
@@ -29,9 +29,6 @@ const PuzzleBoard = () => {
 
   const handleKeyPress = (e) => {
     console.log("🚀 handleKeyPress ~ key", e.code, e.charCode, e.shiftKey);
-    // shift   16
-    // ctrl    17
-    // alt     18
     // 'UP': 38,
     // 'DOWN': 40,
     // 'LEFT': 37,
@@ -48,7 +45,7 @@ const PuzzleBoard = () => {
         const num = parseInt(e.code.slice(5));
         dispatch(setSelectedCellsPencilMarks(num));
         break;
-      case e.key === "Enter":
+      case e.key === "Enter" || e.key === "Escape":
         dispatch(clearSelectedCells());
         break;
       default:
@@ -65,7 +62,7 @@ const PuzzleBoard = () => {
             row={rowIndex}
             col={colIndex}
             data={cell}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
           />
         ))
       )}
