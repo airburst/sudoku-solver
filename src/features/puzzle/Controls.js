@@ -1,8 +1,8 @@
 // import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { lockBoard } from "../features/puzzle/puzzleSlice";
+import { lockBoard } from "./puzzleSlice";
 
 const Container = styled.div`
   display: flex;

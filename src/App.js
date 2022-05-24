@@ -1,8 +1,7 @@
 // import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
-import PuzzleBoard from "./components/PuzzleBoard";
-import Controls from "./components/Controls";
-// import "semantic-ui-css/semantic.min.css";
+import PuzzleBoard from "./features/puzzle/PuzzleBoard";
+import Controls from "./features/puzzle/Controls";
 
 const Container = styled.div`
   display: flex;
@@ -27,21 +26,9 @@ function App() {
   //   [0, 0, 0, 0, 0, 0, 0, 0, 9],
   // ];
 
-  const emptyBoard = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ];
-
   return (
     <Container>
-      <PuzzleBoard data={emptyBoard} />
+      <PuzzleBoard />
       <Controls />
     </Container>
   );

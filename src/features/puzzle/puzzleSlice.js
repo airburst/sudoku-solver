@@ -27,6 +27,7 @@ export const puzzleSlice = createSlice({
       const { row, col } = action.payload;
       state.board[row][col].selected = !state.board[row][col].selected;
     },
+    // Put board into 'play' mode
     lockBoard: (state) => {
       state.locked = true;
       state.board.map((row) => row.map((cell) => (cell.selected = false)));

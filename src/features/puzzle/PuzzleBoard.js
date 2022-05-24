@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import Cell from "./Cell";
 import { useSelector, useDispatch } from "react-redux";
-import { setCellValue } from "../features/puzzle/puzzleSlice";
+import { setCellValue } from "./puzzleSlice";
 
 const StyledBoard = styled.div`
   flex-grow: 1;

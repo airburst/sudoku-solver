@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleCellSelected } from "../features/puzzle/puzzleSlice";
+import { toggleCellSelected } from "./puzzleSlice";
 
 const StyledCell = styled.div`
   position: relative;
