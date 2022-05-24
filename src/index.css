@@ -2,6 +2,7 @@
   --cell-size: 100px;
   --fixed-color: #262626;
   --guess-color: #4551f2;
+  --btn-color: #4551f2;
   --selected-bg-color: rgb(250, 250, 176);
 }
 
@@ -12,9 +13,4 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }

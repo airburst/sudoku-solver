@@ -1,5 +1,6 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleCellSelected } from "../features/puzzle/puzzleSlice";
 
 const StyledCell = styled.div`
   position: relative;
@@ -30,31 +31,36 @@ const StyledCell = styled.div`
   }
 `;
 
-const Cell = ({ initialValue, row = 0, col = 0, handleClick }) => {
-  const [selected, setSelected] = useState(0);
+const Content = styled.div`
+  position: absolute;
+`;
+
+const Cell = ({ data, row = 0, col = 0, setCellValue }) => {
+  const locked = useSelector((state) => state.puzzle.locked);
+  const dispatch = useDispatch();
   // TODO: handle pencil marks
-  const hasSetValue = initialValue !== 0;
+  const hasSetValue = data.val !== 0;
 
   // TODO: emit selected event to store
   // Selected cells are the targets for keyboard input
   const handleClickCell = () => {
-    if (!hasSetValue) {
-      console.log(`Clicked cell: [${row}, ${col}]`); // FIXME: remove
-      setSelected(!selected);
-      handleClick?.(selected);
-    }
+    // if (!hasSetValue) {
+    dispatch(toggleCellSelected({ row, col }));
+    setCellValue?.(9);
+    // }
   };
 
   return (
     <StyledCell
       onClick={handleClickCell}
       hasSetValue={hasSetValue}
-      selected={selected}
+      selected={data.selected}
       row={row}
       col={col}
+      locked={locked}
       tabIndex={hasSetValue ? -1 : 1}
     >
-      {initialValue > 0 ? initialValue : ""}
+      <Content>{data.val > 0 ? data.val : ""}</Content>
     </StyledCell>
   );
 };
