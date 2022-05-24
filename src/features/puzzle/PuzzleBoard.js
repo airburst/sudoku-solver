@@ -2,7 +2,11 @@
 import styled from "styled-components";
 import Cell from "./Cell";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedCellsValue, clearSelectedCells } from "./puzzleSlice";
+import {
+  setSelectedCellsValue,
+  clearSelectedCells,
+  setSelectedCellsPencilMarks,
+} from "./puzzleSlice";
 
 const StyledBoard = styled.div`
   flex-grow: 1;
@@ -23,13 +27,28 @@ const PuzzleBoard = () => {
   const boardData = useSelector((state) => state.puzzle.board);
   const dispatch = useDispatch();
 
-  const handleKeyPress = ({ key }) => {
-    console.log("🚀 handleKeyPress ~ key", key); // FIXME:
+  const handleKeyPress = (e) => {
+    console.log("🚀 handleKeyPress ~ key", e.code, e.charCode, e.shiftKey);
+    // shift   16
+    // ctrl    17
+    // alt     18
+    // 'UP': 38,
+    // 'DOWN': 40,
+    // 'LEFT': 37,
+    // 'RIGHT': 39,
+    // 'RETURN': 13,
+    // 'ESCAPE': 27,
+    // 'BACKSPACE': 8,
+    // 'SPACE': 32
     switch (true) {
-      case /^[0-9]$/i.test(key):
-        dispatch(setSelectedCellsValue(key));
+      case /^[0-9]$/i.test(e.key):
+        dispatch(setSelectedCellsValue(Number(e.key)));
         break;
-      case key === "Enter":
+      case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
+        const num = parseInt(e.code.slice(5));
+        dispatch(setSelectedCellsPencilMarks(num));
+        break;
+      case e.key === "Enter":
         dispatch(clearSelectedCells());
         break;
       default:

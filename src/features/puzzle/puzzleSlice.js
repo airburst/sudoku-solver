@@ -40,6 +40,8 @@ export const puzzleSlice = createSlice({
     setSelectedCellsValue: (state, action) => {
       for (const [row, col] of state.selectedCells) {
         state.board[row][col].val = action.payload;
+        // Clear pencile marks
+        state.board[row][col].pencilMarks = [];
       }
     },
     clearSelectedCells: (state) => {
@@ -47,6 +49,18 @@ export const puzzleSlice = createSlice({
         state.board[row][col].selected = false;
       }
       state.selectedCells = [];
+    },
+    setSelectedCellsPencilMarks: (state, action) => {
+      for (const [row, col] of state.selectedCells) {
+        // If the cell has the pencil mark, remove it
+        if (state.board[row][col].pencilMarks.includes(action.payload)) {
+          state.board[row][col].pencilMarks = state.board[row][
+            col
+          ].pencilMarks.filter((mark) => mark !== action.payload);
+        } else {
+          state.board[row][col].pencilMarks.push(action.payload);
+        }
+      }
     },
     // Put board into 'play' mode
     lockBoard: (state) => {
@@ -63,6 +77,7 @@ export const {
   toggleCellSelected,
   setSelectedCellsValue,
   clearSelectedCells,
+  setSelectedCellsPencilMarks,
 } = puzzleSlice.actions;
 
 export default puzzleSlice.reducer;

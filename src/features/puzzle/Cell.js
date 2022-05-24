@@ -35,6 +35,14 @@ const Content = styled.div`
   position: absolute;
 `;
 
+const PencilMark = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 1rem;
+  padding-left: 2px;
+`;
+
 const Cell = ({ data, row = 0, col = 0, onKeyPress }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
@@ -58,12 +66,14 @@ const Cell = ({ data, row = 0, col = 0, onKeyPress }) => {
       onClick={handleClickCell}
       hasSetValue={hasSetValue}
       selected={data.selected}
+      pencilMarks={data.pencilMarks}
       row={row}
       col={col}
       locked={locked}
       tabIndex={hasSetValue ? -1 : 1}
       onKeyPress={onKeyPress}
     >
+      <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
       <Content>{data.val > 0 ? data.val : ""}</Content>
     </StyledCell>
   );
