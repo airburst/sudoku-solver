@@ -83,6 +83,9 @@ export const puzzleSlice = createSlice({
       const markType = mode === "centre" ? "centreMarks" : "pencilMarks";
 
       for (const [row, col] of state.selectedCells) {
+        if (state.board[row][col].fixedVal > 0) {
+          return;
+        }
         // If the cell has the pencil mark, remove it
         if (state.board[row][col][markType].includes(action.payload)) {
           state.board[row][col][markType] = state.board[row][col][
