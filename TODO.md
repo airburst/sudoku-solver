@@ -2,6 +2,7 @@
 
 ## Bugs
 
+- Allow multiple centre marks
 - Fix firebase deploy action in CI/CD
 
 ## Enhancements
