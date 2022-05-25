@@ -2,7 +2,6 @@
 
 ## Bugs
 
-- User can only enter one pencil mark and cell is unselected
 - Fix firebase deploy action in CI/CD
 
 ## Enhancements
@@ -11,6 +10,7 @@
 - Add play mode controls
 - Add center pencil marks
 - Sticky Shift/Ctrl buttons?
+- Save state to localStorage: add a refresh button
 
 - Check board for errors - display
 - Prevent bad entries?
