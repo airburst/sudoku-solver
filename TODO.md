@@ -7,12 +7,13 @@
 
 ## Enhancements
 
+- Check board for errors - display
+- Prevent bad entries?
+
+- Confirm on restart button
 - Style edge pencil marks around border
 - Save state to localStorage: add a refresh button
 
-- Confirm on restart button
-- Check board for errors - display
-- Prevent bad entries?
 - Add a timer
 - Save board to firebase and create route / redirect
 - Add a "solve" button
