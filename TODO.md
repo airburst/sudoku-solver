@@ -13,5 +13,7 @@
 - Add a timer
 - Save board to firebase and create route / redirect
 
+- Set board from photo
+
 - Style edge pencil marks around border
 - Refactor solver code
