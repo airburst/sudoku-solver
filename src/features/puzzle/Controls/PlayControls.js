@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { lockBoard, setSelectedCellsValue } from "../puzzleSlice";
+import { lockBoard, setSelectedCellsValue, changeMode } from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
   display: grid;
@@ -26,42 +26,62 @@ const SaveSpan = styled.div`
 const Controls = () => {
   const dispatch = useDispatch();
   const locked = useSelector((state) => state.puzzle.locked);
+  const mode = useSelector((state) => state.puzzle.mode);
 
   const setValue = (val) => dispatch(setSelectedCellsValue(val));
+  const setMode = (m) => dispatch(changeMode(m));
 
   return (
     <ButtonContainer>
-      <Button onClick={() => console.log("// TODO")}>Normal</Button>
-      <Button onClick={() => setValue(1)}>1</Button>
-      <Button onClick={() => setValue(2)}>2</Button>
-      <Button onClick={() => setValue(3)}>3</Button>
-      <Button basic onClick={() => console.log("// TODO")}>
+      <Button primary={mode === "normal"} onClick={() => setMode("normal")}>
+        Normal
+      </Button>
+      <Button primary onClick={() => setValue(1)}>
+        1
+      </Button>
+      <Button primary onClick={() => setValue(2)}>
+        2
+      </Button>
+      <Button primary onClick={() => setValue(3)}>
+        3
+      </Button>
+      <Button primary={mode === "corner"} onClick={() => setMode("corner")}>
         Corner
       </Button>
-      <Button onClick={() => setValue(4)}>4</Button>
-      <Button onClick={() => setValue(5)}>5</Button>
-      <Button onClick={() => setValue(6)}>6</Button>
-      <Button basic onClick={() => console.log("// TODO")}>
+      <Button primary onClick={() => setValue(4)}>
+        4
+      </Button>
+      <Button primary onClick={() => setValue(5)}>
+        5
+      </Button>
+      <Button primary onClick={() => setValue(6)}>
+        6
+      </Button>
+      <Button primary={mode === "centre"} onClick={() => setMode("centre")}>
         Centre
       </Button>
-      <Button onClick={() => setValue(7)}>7</Button>
-      <Button onClick={() => setValue(8)}>8</Button>
-      <Button onClick={() => setValue(9)}>9</Button>
+      <Button primary onClick={() => setValue(7)}>
+        7
+      </Button>
+      <Button primary onClick={() => setValue(8)}>
+        8
+      </Button>
+      <Button primary onClick={() => setValue(9)}>
+        9
+      </Button>
       {locked && (
         <>
-          <Button basic onClick={() => console.log("// TODO")}>
-            Solve
-          </Button>
+          <Button onClick={() => console.log("// TODO")}>Solve</Button>
           <ColSpan>
-            <Button basic onClick={() => setValue(0)}>
-              Delete
-            </Button>
+            <Button onClick={() => setValue(0)}>Delete</Button>
           </ColSpan>
         </>
       )}
       {!locked && (
         <SaveSpan>
-          <Button onClick={() => dispatch(lockBoard())}>Save</Button>
+          <Button primary onClick={() => dispatch(lockBoard())}>
+            Save
+          </Button>
         </SaveSpan>
       )}
     </ButtonContainer>

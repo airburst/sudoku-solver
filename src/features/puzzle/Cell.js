@@ -49,7 +49,7 @@ const PencilMark = styled.div`
   color: var(--guess-color);
 `;
 
-const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
+const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
   const hasSetValue = locked && data.fixedVal !== 0;
@@ -69,6 +69,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
       locked={locked}
       tabIndex={hasSetValue ? -1 : 1}
       onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
     >
       <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
       {data.fixedVal > 0 && <FixedContent>{data.fixedVal}</FixedContent>}

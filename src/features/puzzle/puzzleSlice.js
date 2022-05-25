@@ -15,6 +15,7 @@ const initialState = {
   board: emptyBoard,
   locked: false,
   selectedCells: [],
+  mode: "normal", // | "corner" | "centre"
 };
 
 const nextCell = (row, col, direction) => {
@@ -101,6 +102,9 @@ export const puzzleSlice = createSlice({
         })
       );
     },
+    changeMode: (state, action) => {
+      state.mode = action.payload;
+    },
     restart: () => initialState,
   },
 });
@@ -114,6 +118,7 @@ export const {
   clearSelectedCells,
   setSelectedCellsPencilMarks,
   move,
+  changeMode,
   restart,
 } = puzzleSlice.actions;
 

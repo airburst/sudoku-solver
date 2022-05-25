@@ -11,8 +11,9 @@ const StyledButton = styled.button`
   height: 100%;
 
   padding: ${({ size }) => (size === "large" ? "0.5rem 2rem" : "0.5rem")};
-  background-color: ${({ basic }) => (!!basic ? "white" : "var(--btn-color)")};
-  color: ${({ basic }) => (!!basic ? "var(--btn-color)" : "white")};
+  background-color: ${({ primary }) =>
+    !!primary ? "var(--btn-color)" : "white"};
+  color: ${({ primary }) => (!!primary ? "white" : "var(--btn-color)")};
 `;
 
 const Button = (props) => {

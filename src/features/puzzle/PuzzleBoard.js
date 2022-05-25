@@ -7,6 +7,7 @@ import {
   clearSelectedCells,
   setSelectedCellsPencilMarks,
   move,
+  changeMode,
 } from "./puzzleSlice";
 
 const StyledBoard = styled.div`
@@ -28,18 +29,36 @@ const StyledBoard = styled.div`
 
 const PuzzleBoard = () => {
   const boardData = useSelector((state) => state.puzzle.board);
+  const mode = useSelector((state) => state.puzzle.mode);
   const dispatch = useDispatch();
 
   const handleKeyPress = (e) => {
-    console.log("🚀 handleKeyPress ~ key", e.code); // FIXME: remove
-
     switch (true) {
       case /^[0-9]$/i.test(e.key):
-        dispatch(setSelectedCellsValue(Number(e.key)));
+        if (mode === "normal") {
+          dispatch(setSelectedCellsValue(Number(e.key)));
+        }
+        const num = parseInt(e.code.slice(5));
+        if (mode === "corner") {
+          dispatch(setSelectedCellsPencilMarks(num));
+        }
+        if (mode === "centre") {
+          dispatch(setSelectedCellsPencilMarks(num)); // FIXME:
+        }
         break;
       case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
-        const num = parseInt(e.code.slice(5));
-        dispatch(setSelectedCellsPencilMarks(num));
+        const shiftNum = parseInt(e.code.slice(5));
+        dispatch(setSelectedCellsPencilMarks(shiftNum));
+        break;
+      case e.ctrlKey && /^Digit[0-9]$/i.test(e.code):
+        const ctrlNum = parseInt(e.code.slice(5));
+        dispatch(setSelectedCellsPencilMarks(ctrlNum)); // FIXME:
+        break;
+      case e.shiftKey:
+        dispatch(changeMode("corner"));
+        break;
+      case e.ctrlKey:
+        dispatch(changeMode("centre"));
         break;
       case /^Arrow/i.test(e.code):
         const direction = e.code.slice(5);
@@ -56,6 +75,8 @@ const PuzzleBoard = () => {
     }
   };
 
+  const handleKeyUp = () => dispatch(changeMode("normal"));
+
   return (
     <StyledBoard>
       {boardData.map((rowData, rowIndex) =>
@@ -66,6 +87,7 @@ const PuzzleBoard = () => {
             col={colIndex}
             data={cell}
             onKeyDown={handleKeyPress}
+            onKeyUp={handleKeyUp}
           />
         ))
       )}

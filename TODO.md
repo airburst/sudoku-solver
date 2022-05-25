@@ -6,13 +6,8 @@
 
 ## Enhancements
 
-- Add play mode control behaviours:
-  - Normal mode:
-  - Corner mode (shift)
-  - Centre mode (ctrl)
-  - remove "colours"? -> solve?
-- Style edge pencil marks around border
 - Add center pencil marks
+- Style edge pencil marks around border
 - Drag to select multiple cells
 - if multi selected, first cell is selected on first arrow press
 - Save state to localStorage: add a refresh button
