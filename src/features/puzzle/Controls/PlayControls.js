@@ -18,9 +18,14 @@ const ColSpan = styled.div`
   grid-column: 2 / 5;
 `;
 
+const SaveSpan = styled.div`
+  grid-row: 4 / 4;
+  grid-column: 1 / 5;
+`;
+
 const Controls = () => {
-  // const dispatch = useDispatch();
-  // const boardLocked = useSelector((state) => state.puzzle.locked);
+  const dispatch = useDispatch();
+  const locked = useSelector((state) => state.puzzle.locked);
 
   return (
     <ButtonContainer>
@@ -36,10 +41,19 @@ const Controls = () => {
       <Button>7</Button>
       <Button>8</Button>
       <Button>9</Button>
-      <Button basic>Colour</Button>
-      <ColSpan>
-        <Button basic>Delete</Button>
-      </ColSpan>
+      {locked && (
+        <>
+          <Button basic>Colour</Button>
+          <ColSpan>
+            <Button basic>Delete</Button>
+          </ColSpan>
+        </>
+      )}
+      {!locked && (
+        <SaveSpan>
+          <Button onClick={() => dispatch(lockBoard())}>Save</Button>
+        </SaveSpan>
+      )}
     </ButtonContainer>
   );
 };
