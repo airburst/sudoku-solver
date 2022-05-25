@@ -17,6 +17,7 @@ const initialState = {
   locked: false,
   selectedCells: [],
   mode: "normal", // | "corner" | "centre"
+  isDragging: false,
 };
 
 const nextCell = (row, col, direction) => {
@@ -44,10 +45,17 @@ export const puzzleSlice = createSlice({
     },
     selectCell: (state, action) => {
       const { row, col } = action.payload;
-      state.board[row][col].selected = true;
-      // Empty selected cells array: TODO: Fix for drag
-      state.selectedCells.map(([r, c]) => (state.board[r][c].selected = false));
-      state.selectedCells = [[row, col]];
+      if (!state.isDragging) {
+        state.selectedCells.map(
+          ([r, c]) => (state.board[r][c].selected = false)
+        );
+        state.selectedCells = [[row, col]];
+        state.board[row][col].selected = true;
+      }
+      if (state.isDragging) {
+        state.board[row][col].selected = true;
+        state.selectedCells.push([row, col]);
+      }
     },
     // Set the value in every selected cell
     setSelectedCellsValue: (state, action) => {
@@ -89,11 +97,16 @@ export const puzzleSlice = createSlice({
     },
     move: (state, action) => {
       const direction = action.payload;
-      // Unselect current cell
-      const [r, c] = state.selectedCells[0];
-      state.board[r][c].selected = false;
+      // Unselect all cells apart from most recent
+      const [lastRow, lastCol] =
+        state.selectedCells[state.selectedCells.length - 1];
+      for (const [r, c] of state.selectedCells) {
+        state.board[r][c].selected = false;
+      }
+      state.selectedCells = [[lastRow, lastCol]];
+      state.board[lastRow][lastCol].selected = false;
       // Determine next cell and select it
-      const { row, col } = nextCell(r, c, direction);
+      const { row, col } = nextCell(lastRow, lastCol, direction);
       state.board[row][col].selected = true;
       state.selectedCells = [[row, col]];
     },
@@ -111,6 +124,9 @@ export const puzzleSlice = createSlice({
     changeMode: (state, action) => {
       state.mode = action.payload;
     },
+    setDragging: (state, action) => {
+      state.isDragging = action.payload;
+    },
     restart: () => initialState,
   },
 });
@@ -126,6 +142,7 @@ export const {
   move,
   changeMode,
   restart,
+  setDragging,
 } = puzzleSlice.actions;
 
 export default puzzleSlice.reducer;

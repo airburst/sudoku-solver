@@ -7,8 +7,6 @@
 ## Enhancements
 
 - Style edge pencil marks around border
-- Drag to select multiple cells
-- if multi selected, first cell is selected on first arrow press
 - Save state to localStorage: add a refresh button
 
 - Confirm on restart button

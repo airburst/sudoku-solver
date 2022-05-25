@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCell } from "./puzzleSlice";
+import { selectCell, setDragging } from "./puzzleSlice";
 
 const StyledCell = styled.div`
   position: relative;
@@ -57,17 +57,27 @@ const CentreMark = styled.div`
 
 const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
   const locked = useSelector((state) => state.puzzle.locked);
+  const isDragging = useSelector((state) => state.puzzle.isDragging);
   const dispatch = useDispatch();
   const hasSetValue = locked && data.fixedVal !== 0;
 
   const handleClickCell = () => {
-    dispatch(selectCell({ row, col }));
+    dispatch(selectCell({ row, col })); // Do this before setting dragging to true
+    dispatch(setDragging(true));
+  };
+  const handleMouseUp = () => dispatch(setDragging(false));
+  const handleMouseOver = () => {
+    if (isDragging) {
+      dispatch(selectCell({ row, col }));
+    }
   };
 
   return (
     <StyledCell
       {...data}
-      onClick={handleClickCell}
+      onMouseDown={handleClickCell}
+      onMouseUp={handleMouseUp}
+      onMouseEnter={handleMouseOver}
       hasSetValue={hasSetValue}
       row={row}
       col={col}
