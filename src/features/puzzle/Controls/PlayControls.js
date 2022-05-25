@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { lockBoard, setSelectedCellsValue, restart } from "../puzzleSlice";
+import { lockBoard, setSelectedCellsValue } from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
   display: grid;

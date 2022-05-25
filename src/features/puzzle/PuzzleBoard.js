@@ -6,6 +6,7 @@ import {
   setSelectedCellsValue,
   clearSelectedCells,
   setSelectedCellsPencilMarks,
+  move,
 } from "./puzzleSlice";
 
 const StyledBoard = styled.div`
@@ -31,6 +32,7 @@ const PuzzleBoard = () => {
 
   const handleKeyPress = (e) => {
     console.log("🚀 handleKeyPress ~ key", e.code); // FIXME: remove
+
     switch (true) {
       case /^[0-9]$/i.test(e.key):
         dispatch(setSelectedCellsValue(Number(e.key)));
@@ -38,6 +40,10 @@ const PuzzleBoard = () => {
       case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
         const num = parseInt(e.code.slice(5));
         dispatch(setSelectedCellsPencilMarks(num));
+        break;
+      case /^Arrow/i.test(e.code):
+        const direction = e.code.slice(5);
+        dispatch(move(direction));
         break;
       case e.key === "Backspace" || e.key === "Delete":
         dispatch(setSelectedCellsValue(0));

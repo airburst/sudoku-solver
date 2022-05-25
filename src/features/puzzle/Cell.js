@@ -11,6 +11,7 @@ const StyledCell = styled.div`
   align-items: center;
   justify-content: center;
   font-size: clamp(1rem, 6vw, 4rem);
+  outline: none;
 
   // Thick borders for (3x3) square edges
   border-top: ${({ row }) =>

@@ -17,6 +17,21 @@ const initialState = {
   selectedCells: [],
 };
 
+const nextCell = (row, col, direction) => {
+  switch (direction) {
+    case "Up":
+      return { row: row === 0 ? 8 : row - 1, col };
+    case "Down":
+      return { row: row === 8 ? 0 : row + 1, col };
+    case "Left":
+      return { row, col: col === 0 ? 8 : col - 1 };
+    case "Right":
+      return { row, col: col === 8 ? 0 : col + 1 };
+    default:
+      return { row, col };
+  }
+};
+
 export const puzzleSlice = createSlice({
   name: "puzzle",
   initialState,
@@ -30,8 +45,7 @@ export const puzzleSlice = createSlice({
       state.board[row][col].selected = true;
       // Empty selected cells array: TODO: Fix for drag
       state.selectedCells.map(([r, c]) => (state.board[r][c].selected = false));
-      state.selectedCells = [];
-      state.selectedCells.push([row, col]);
+      state.selectedCells = [[row, col]];
     },
     // Set the value in every selected cell
     setSelectedCellsValue: (state, action) => {
@@ -67,6 +81,16 @@ export const puzzleSlice = createSlice({
         state.board[row][col].val = 0;
       }
     },
+    move: (state, action) => {
+      const direction = action.payload;
+      // Unselect current cell
+      const [r, c] = state.selectedCells[0];
+      state.board[r][c].selected = false;
+      // Determine next cell and select it
+      const { row, col } = nextCell(r, c, direction);
+      state.board[row][col].selected = true;
+      state.selectedCells = [[row, col]];
+    },
     // Put board into 'play' mode
     lockBoard: (state) => {
       state.locked = true;
@@ -89,6 +113,7 @@ export const {
   setSelectedCellsValue,
   clearSelectedCells,
   setSelectedCellsPencilMarks,
+  move,
   restart,
 } = puzzleSlice.actions;
 
