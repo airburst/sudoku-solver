@@ -88,8 +88,8 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
     >
       <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
       <CentreMark>{data.centreMarks?.join(" ")}</CentreMark>
-      {data.fixedVal > 0 && <FixedContent>{data.fixedVal}</FixedContent>}
       {data.val > 0 && <Content>{data.val}</Content>}
+      {data.fixedVal > 0 && <FixedContent>{data.fixedVal}</FixedContent>}
     </StyledCell>
   );
 };

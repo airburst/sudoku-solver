@@ -39,6 +39,9 @@ export const puzzleSlice = createSlice({
   name: "puzzle",
   initialState,
   reducers: {
+    setBoard: (state, action) => {
+      state.board = action.payload;
+    },
     setCellValue: (state, action) => {
       const { row, col, value } = action.payload;
       state.board[row][col].val = value;
@@ -136,6 +139,7 @@ export const puzzleSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  setBoard,
   setCellValue,
   lockBoard,
   selectCell,

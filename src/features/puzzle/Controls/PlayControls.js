@@ -1,12 +1,14 @@
 // import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
+import solve from "../../../services/Solver";
 import { useSelector, useDispatch } from "react-redux";
 import {
   lockBoard,
   setSelectedCellsValue,
   setSelectedCellsPencilMarks,
   changeMode,
+  setBoard,
 } from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
@@ -32,6 +34,7 @@ const Controls = () => {
   const dispatch = useDispatch();
   const locked = useSelector((state) => state.puzzle.locked);
   const mode = useSelector((state) => state.puzzle.mode);
+  const board = useSelector((state) => state.puzzle.board);
 
   const setValue = (val) => {
     if (mode === "normal") {
@@ -86,7 +89,9 @@ const Controls = () => {
       </Button>
       {locked && (
         <>
-          <Button onClick={() => console.log("// TODO")}>Solve</Button>
+          <Button onClick={() => dispatch(setBoard(solve(board)))}>
+            Solve
+          </Button>
           <ColSpan>
             <Button onClick={() => setValue(0)}>Delete</Button>
           </ColSpan>

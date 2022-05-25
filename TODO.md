@@ -8,12 +8,10 @@
 ## Enhancements
 
 - Check board for errors - display
-- Prevent bad entries?
-
 - Confirm on restart button
-- Style edge pencil marks around border
 - Save state to localStorage: add a refresh button
-
 - Add a timer
 - Save board to firebase and create route / redirect
-- Add a "solve" button
+
+- Style edge pencil marks around border
+- Refactor solver code
