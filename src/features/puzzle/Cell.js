@@ -49,6 +49,12 @@ const PencilMark = styled.div`
   color: var(--guess-color);
 `;
 
+const CentreMark = styled.div`
+  position: absolute;
+  font-size: 1rem;
+  color: var(--guess-color);
+`;
+
 const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
@@ -60,10 +66,9 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
 
   return (
     <StyledCell
+      {...data}
       onClick={handleClickCell}
       hasSetValue={hasSetValue}
-      selected={data.selected}
-      pencilMarks={data.pencilMarks}
       row={row}
       col={col}
       locked={locked}
@@ -72,6 +77,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
       onKeyUp={onKeyUp}
     >
       <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
+      <CentreMark>{data.centreMarks?.join(" ")}</CentreMark>
       {data.fixedVal > 0 && <FixedContent>{data.fixedVal}</FixedContent>}
       {data.val > 0 && <Content>{data.val}</Content>}
     </StyledCell>

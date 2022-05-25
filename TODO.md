@@ -6,7 +6,6 @@
 
 ## Enhancements
 
-- Add center pencil marks
 - Style edge pencil marks around border
 - Drag to select multiple cells
 - if multi selected, first cell is selected on first arrow press

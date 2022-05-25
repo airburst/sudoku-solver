@@ -4,6 +4,7 @@ const emptyCell = {
   val: 0,
   fixedVal: 0,
   pencilMarks: [],
+  centreMarks: [],
   selected: false,
 };
 
@@ -60,6 +61,7 @@ export const puzzleSlice = createSlice({
         }
         // Clear pencil marks and selected status
         state.board[row][col].pencilMarks = [];
+        state.board[row][col].centreMarks = [];
       }
     },
     clearSelectedCells: (state) => {
@@ -69,14 +71,17 @@ export const puzzleSlice = createSlice({
       state.selectedCells = [];
     },
     setSelectedCellsPencilMarks: (state, action) => {
+      const { mode } = state;
+      const markType = mode === "centre" ? "centreMarks" : "pencilMarks";
+
       for (const [row, col] of state.selectedCells) {
         // If the cell has the pencil mark, remove it
-        if (state.board[row][col].pencilMarks.includes(action.payload)) {
-          state.board[row][col].pencilMarks = state.board[row][
-            col
-          ].pencilMarks.filter((mark) => mark !== action.payload);
+        if (state.board[row][col][markType].includes(action.payload)) {
+          state.board[row][col][markType] = state.board[row][col][
+            markType
+          ].filter((mark) => mark !== action.payload);
         } else {
-          state.board[row][col].pencilMarks.push(action.payload);
+          state.board[row][col][markType].push(action.payload);
         }
         // Remove any value from cell when changing pencil marks
         state.board[row][col].val = 0;
@@ -99,6 +104,7 @@ export const puzzleSlice = createSlice({
         row.forEach((cell) => {
           cell.selected = false;
           cell.pencilMarks = [];
+          cell.centreMarks = [];
         })
       );
     },

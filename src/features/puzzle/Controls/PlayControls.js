@@ -2,7 +2,12 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { lockBoard, setSelectedCellsValue, changeMode } from "../puzzleSlice";
+import {
+  lockBoard,
+  setSelectedCellsValue,
+  setSelectedCellsPencilMarks,
+  changeMode,
+} from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
   display: grid;
@@ -28,7 +33,17 @@ const Controls = () => {
   const locked = useSelector((state) => state.puzzle.locked);
   const mode = useSelector((state) => state.puzzle.mode);
 
-  const setValue = (val) => dispatch(setSelectedCellsValue(val));
+  const setValue = (val) => {
+    if (mode === "normal") {
+      dispatch(setSelectedCellsValue(Number(val)));
+    }
+    if (mode === "corner") {
+      dispatch(setSelectedCellsPencilMarks(val));
+    }
+    if (mode === "centre") {
+      dispatch(setSelectedCellsPencilMarks(val)); // FIXME:
+    }
+  };
   const setMode = (m) => dispatch(changeMode(m));
 
   return (
