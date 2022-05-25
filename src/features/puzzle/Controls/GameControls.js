@@ -1,8 +1,8 @@
 // import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
-import { useSelector, useDispatch } from "react-redux";
-import { lockBoard } from "../puzzleSlice";
+import { useDispatch } from "react-redux";
+import { restart } from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
   display: grid;
@@ -13,14 +13,15 @@ const ButtonContainer = styled.div`
 `;
 
 const GameControls = () => {
-  // const dispatch = useDispatch();
-  // const boardLocked = useSelector((state) => state.puzzle.locked);
+  const dispatch = useDispatch();
 
   return (
     <ButtonContainer>
       <Button basic>Undo</Button>
       <Button basic>Redo</Button>
-      <Button basic>Restart</Button>
+      <Button basic onClick={() => dispatch(restart())}>
+        Restart
+      </Button>
       <Button basic>Check</Button>
     </ButtonContainer>
   );

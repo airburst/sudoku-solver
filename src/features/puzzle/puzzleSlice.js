@@ -37,7 +37,9 @@ export const puzzleSlice = createSlice({
     setSelectedCellsValue: (state, action) => {
       for (const [row, col] of state.selectedCells) {
         if (state.locked) {
-          state.board[row][col].val = action.payload;
+          if (state.board[row][col].fixedVal === 0) {
+            state.board[row][col].val = action.payload;
+          }
         } else {
           state.board[row][col].fixedVal = action.payload;
         }
@@ -75,6 +77,7 @@ export const puzzleSlice = createSlice({
         })
       );
     },
+    restart: () => initialState,
   },
 });
 
@@ -86,6 +89,7 @@ export const {
   setSelectedCellsValue,
   clearSelectedCells,
   setSelectedCellsPencilMarks,
+  restart,
 } = puzzleSlice.actions;
 
 export default puzzleSlice.reducer;

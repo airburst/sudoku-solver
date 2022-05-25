@@ -54,14 +54,8 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
   const hasSetValue = locked && data.fixedVal !== 0;
 
   const handleClickCell = () => {
-    if (!hasSetValue) {
-      dispatch(selectCell({ row, col }));
-    }
+    dispatch(selectCell({ row, col }));
   };
-
-  // const setValue = (val) => {
-  //   dispatch(setCellValue({ row, col, value: val }));
-  // };
 
   return (
     <StyledCell

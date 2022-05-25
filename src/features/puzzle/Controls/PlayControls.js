@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { lockBoard } from "../puzzleSlice";
+import { lockBoard, setSelectedCellsValue, restart } from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
   display: grid;
@@ -27,25 +27,35 @@ const Controls = () => {
   const dispatch = useDispatch();
   const locked = useSelector((state) => state.puzzle.locked);
 
+  const setValue = (val) => dispatch(setSelectedCellsValue(val));
+
   return (
     <ButtonContainer>
-      <Button>Normal</Button>
-      <Button>1</Button>
-      <Button>2</Button>
-      <Button>3</Button>
-      <Button basic>Corner</Button>
-      <Button>4</Button>
-      <Button>5</Button>
-      <Button>6</Button>
-      <Button basic>Centre</Button>
-      <Button>7</Button>
-      <Button>8</Button>
-      <Button>9</Button>
+      <Button onClick={() => console.log("// TODO")}>Normal</Button>
+      <Button onClick={() => setValue(1)}>1</Button>
+      <Button onClick={() => setValue(2)}>2</Button>
+      <Button onClick={() => setValue(3)}>3</Button>
+      <Button basic onClick={() => console.log("// TODO")}>
+        Corner
+      </Button>
+      <Button onClick={() => setValue(4)}>4</Button>
+      <Button onClick={() => setValue(5)}>5</Button>
+      <Button onClick={() => setValue(6)}>6</Button>
+      <Button basic onClick={() => console.log("// TODO")}>
+        Centre
+      </Button>
+      <Button onClick={() => setValue(7)}>7</Button>
+      <Button onClick={() => setValue(8)}>8</Button>
+      <Button onClick={() => setValue(9)}>9</Button>
       {locked && (
         <>
-          <Button basic>Colour</Button>
+          <Button basic onClick={() => console.log("// TODO")}>
+            Solve
+          </Button>
           <ColSpan>
-            <Button basic>Delete</Button>
+            <Button basic onClick={() => setValue(0)}>
+              Delete
+            </Button>
           </ColSpan>
         </>
       )}
