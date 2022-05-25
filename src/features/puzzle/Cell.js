@@ -46,7 +46,7 @@ const PencilMark = styled.div`
 const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
-  const hasSetValue = data.val !== 0;
+  const hasSetValue = locked && data.val !== 0;
 
   const handleClickCell = () => {
     if (!hasSetValue) {

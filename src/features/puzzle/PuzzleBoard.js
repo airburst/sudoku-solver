@@ -20,6 +20,7 @@ const StyledBoard = styled.div`
 
   @media (min-width: 760px) {
     margin: auto;
+    margin-top: 2rem;
   }
 `;
 
@@ -28,22 +29,20 @@ const PuzzleBoard = () => {
   const dispatch = useDispatch();
 
   const handleKeyPress = (e) => {
-    console.log("🚀 handleKeyPress ~ key", e.code, e.charCode, e.shiftKey);
-    // 'UP': 38,
-    // 'DOWN': 40,
-    // 'LEFT': 37,
-    // 'RIGHT': 39,
-    // 'RETURN': 13,
-    // 'ESCAPE': 27,
-    // 'BACKSPACE': 8,
-    // 'SPACE': 32
+    console.log("🚀 handleKeyPress ~ key", e.code); // FIXME: remove
     switch (true) {
       case /^[0-9]$/i.test(e.key):
         dispatch(setSelectedCellsValue(Number(e.key)));
+        dispatch(clearSelectedCells());
         break;
       case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
         const num = parseInt(e.code.slice(5));
         dispatch(setSelectedCellsPencilMarks(num));
+        dispatch(clearSelectedCells());
+        break;
+      case e.key === "Backspace" || e.key === "Delete":
+        dispatch(setSelectedCellsValue(0));
+        dispatch(clearSelectedCells());
         break;
       case e.key === "Enter" || e.key === "Escape":
         dispatch(clearSelectedCells());

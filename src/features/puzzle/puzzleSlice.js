@@ -40,7 +40,7 @@ export const puzzleSlice = createSlice({
     setSelectedCellsValue: (state, action) => {
       for (const [row, col] of state.selectedCells) {
         state.board[row][col].val = action.payload;
-        // Clear pencile marks
+        // Clear pencil marks and selected status
         state.board[row][col].pencilMarks = [];
       }
     },
@@ -60,6 +60,8 @@ export const puzzleSlice = createSlice({
         } else {
           state.board[row][col].pencilMarks.push(action.payload);
         }
+        // Remove any value from cell when changing pencil marks
+        state.board[row][col].val = 0;
       }
     },
     // Put board into 'play' mode
