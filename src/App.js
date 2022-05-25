@@ -6,10 +6,12 @@ import Controls from "./features/puzzle/Controls";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.25rem;
+  align-items: center;
+  height: 100%;
 
   @media (min-width: 912px) {
     flex-direction: row;
+    justify-content: center;
   }
 `;
 

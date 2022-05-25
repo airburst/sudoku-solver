@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const emptyCell = {
   val: 0,
+  fixedVal: 0,
   pencilMarks: [],
   selected: false,
 };
@@ -24,22 +25,22 @@ export const puzzleSlice = createSlice({
       const { row, col, value } = action.payload;
       state.board[row][col].val = value;
     },
-    toggleCellSelected: (state, action) => {
+    selectCell: (state, action) => {
       const { row, col } = action.payload;
-      state.board[row][col].selected = !state.board[row][col].selected;
-      // Update selected cells array
-      if (state.board[row][col].selected) {
-        state.selectedCells.push([row, col]);
-      } else {
-        state.selectedCells = state.selectedCells.filter(
-          ([r, c]) => r !== row || c !== col
-        );
-      }
+      state.board[row][col].selected = true;
+      // Empty selected cells array: TODO: Fix for drag
+      state.selectedCells.map(([r, c]) => (state.board[r][c].selected = false));
+      state.selectedCells = [];
+      state.selectedCells.push([row, col]);
     },
     // Set the value in every selected cell
     setSelectedCellsValue: (state, action) => {
       for (const [row, col] of state.selectedCells) {
-        state.board[row][col].val = action.payload;
+        if (state.locked) {
+          state.board[row][col].val = action.payload;
+        } else {
+          state.board[row][col].fixedVal = action.payload;
+        }
         // Clear pencil marks and selected status
         state.board[row][col].pencilMarks = [];
       }
@@ -67,7 +68,12 @@ export const puzzleSlice = createSlice({
     // Put board into 'play' mode
     lockBoard: (state) => {
       state.locked = true;
-      state.board.map((row) => row.map((cell) => (cell.selected = false)));
+      state.board.map((row) =>
+        row.forEach((cell) => {
+          cell.selected = false;
+          cell.pencilMarks = [];
+        })
+      );
     },
   },
 });
@@ -76,7 +82,7 @@ export const puzzleSlice = createSlice({
 export const {
   setCellValue,
   lockBoard,
-  toggleCellSelected,
+  selectCell,
   setSelectedCellsValue,
   clearSelectedCells,
   setSelectedCellsPencilMarks,

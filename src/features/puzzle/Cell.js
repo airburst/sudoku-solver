@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleCellSelected } from "./puzzleSlice";
+import { selectCell } from "./puzzleSlice";
 
 const StyledCell = styled.div`
   position: relative;
@@ -18,8 +18,6 @@ const StyledCell = styled.div`
   border-left: ${({ col }) =>
     col % 3 === 0 ? "4px solid black" : "1px solid black"};
 
-  color: ${({ hasSetValue }) =>
-    hasSetValue ? "var(--fixed-color)" : "var(--guess-color)"};
   cursor: ${({ hasSetValue }) => (hasSetValue ? "default" : "pointer")};
   background-color: ${({ selected }) =>
     selected ? "var(--selected-bg-color)" : "white"};
@@ -31,8 +29,14 @@ const StyledCell = styled.div`
   }
 `;
 
+const FixedContent = styled.div`
+  position: absolute;
+  color: var(--fixed-color);
+`;
+
 const Content = styled.div`
   position: absolute;
+  color: var(--guess-color);
 `;
 
 const PencilMark = styled.div`
@@ -41,16 +45,17 @@ const PencilMark = styled.div`
   left: 0;
   font-size: 1rem;
   padding-left: 2px;
+  color: var(--guess-color);
 `;
 
 const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
   const locked = useSelector((state) => state.puzzle.locked);
   const dispatch = useDispatch();
-  const hasSetValue = locked && data.val !== 0;
+  const hasSetValue = locked && data.fixedVal !== 0;
 
   const handleClickCell = () => {
     if (!hasSetValue) {
-      dispatch(toggleCellSelected({ row, col }));
+      dispatch(selectCell({ row, col }));
     }
   };
 
@@ -71,7 +76,8 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown }) => {
       onKeyDown={onKeyDown}
     >
       <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
-      <Content>{data.val > 0 ? data.val : ""}</Content>
+      {data.fixedVal > 0 && <FixedContent>{data.fixedVal}</FixedContent>}
+      {data.val > 0 && <Content>{data.val}</Content>}
     </StyledCell>
   );
 };

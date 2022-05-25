@@ -13,14 +13,15 @@ const StyledBoard = styled.div`
   display: grid;
   grid-template-rows: repeat(9, auto);
   grid-template-columns: repeat(9, auto);
+  width: calc(100vw - 16px);
   max-width: 760px;
+  max-height: calc(100vw - 16px);
   border-right: 4px solid black;
   border-bottom: 4px solid black;
-  margin-bottom: 1rem;
+  margin: 1rem;
 
   @media (min-width: 760px) {
     margin: auto;
-    margin-top: 2rem;
   }
 `;
 
@@ -33,16 +34,13 @@ const PuzzleBoard = () => {
     switch (true) {
       case /^[0-9]$/i.test(e.key):
         dispatch(setSelectedCellsValue(Number(e.key)));
-        dispatch(clearSelectedCells());
         break;
       case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
         const num = parseInt(e.code.slice(5));
         dispatch(setSelectedCellsPencilMarks(num));
-        dispatch(clearSelectedCells());
         break;
       case e.key === "Backspace" || e.key === "Delete":
         dispatch(setSelectedCellsValue(0));
-        dispatch(clearSelectedCells());
         break;
       case e.key === "Enter" || e.key === "Escape":
         dispatch(clearSelectedCells());
