@@ -1,9 +1,16 @@
-// import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import PuzzleBoard from "./features/puzzle/PuzzleBoard";
 import Controls from "./features/puzzle/Controls";
+import TimerBar from "./components/TimerBar";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,22 +23,15 @@ const Container = styled.div`
 `;
 
 function App() {
-  // const puzzleData = [
-  //   [6, 3, 0, 0, 0, 0, 0, 8, 1],
-  //   [0, 2, 0, 0, 0, 3, 0, 0, 0],
-  //   [0, 0, 0, 0, 1, 7, 4, 3, 0],
-  //   [0, 9, 6, 4, 0, 0, 5, 7, 0],
-  //   [0, 0, 0, 7, 6, 2, 0, 0, 0],
-  //   [0, 8, 0, 0, 0, 0, 6, 0, 0],
-  //   [0, 6, 0, 0, 2, 0, 0, 0, 0],
-  //   [3, 0, 9, 0, 0, 0, 0, 6, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 9],
-  // ];
+  const locked = useSelector((state) => state.puzzle.locked);
 
   return (
     <Container>
-      <PuzzleBoard />
-      <Controls />
+      {locked && <TimerBar />}
+      <Content>
+        <PuzzleBoard />
+        <Controls />
+      </Content>
     </Container>
   );
 }

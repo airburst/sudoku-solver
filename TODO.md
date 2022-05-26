@@ -10,7 +10,6 @@
 - Solve should remove all pencil marks
 - Confirm on restart button
 - Save state to localStorage: add a refresh button
-- Add a timer
 - Save board to firebase and create route / redirect
 
 - Style edge pencil marks around border

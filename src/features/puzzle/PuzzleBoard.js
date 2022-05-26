@@ -1,4 +1,3 @@
-// import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
 import { useSelector, useDispatch } from "react-redux";
