@@ -2,7 +2,8 @@
 
 ## Bugs
 
-- Allow multiple centre marks
+- Don't set pencil marks when board is unlocked (remove buttons?)
+- Solve should remove all pencil marks
 - Fix firebase deploy action in CI/CD
 
 ## Enhancements
@@ -12,8 +13,6 @@
 - Save state to localStorage: add a refresh button
 - Add a timer
 - Save board to firebase and create route / redirect
-
-- Set board from photo
 
 - Style edge pencil marks around border
 - Refactor solver code

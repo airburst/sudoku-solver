@@ -34,25 +34,27 @@ const PuzzleBoard = () => {
 
   const handleKeyPress = (e) => {
     switch (true) {
-      case /^[0-9]$/i.test(e.key):
-        if (mode === "normal") {
-          dispatch(setSelectedCellsValue(Number(e.key)));
-        }
-        const num = parseInt(e.code.slice(5));
-        if (mode === "corner") {
-          dispatch(setSelectedCellsPencilMarks(num));
-        }
-        if (mode === "centre") {
-          dispatch(setSelectedCellsPencilMarks(num)); // FIXME:
-        }
-        break;
       case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
+        dispatch(changeMode("corner"));
         const shiftNum = parseInt(e.code.slice(5));
         dispatch(setSelectedCellsPencilMarks(shiftNum));
         break;
       case e.ctrlKey && /^Digit[0-9]$/i.test(e.code):
+        dispatch(changeMode("centre"));
         const ctrlNum = parseInt(e.code.slice(5));
-        dispatch(setSelectedCellsPencilMarks(ctrlNum)); // FIXME:
+        dispatch(setSelectedCellsPencilMarks(ctrlNum));
+        break;
+      case /^Digit[0-9]$/i.test(e.code):
+        const num = parseInt(e.code.slice(5));
+        if (mode === "normal") {
+          dispatch(setSelectedCellsValue(num));
+        }
+        if (mode === "corner") {
+          dispatch(setSelectedCellsPencilMarks(num));
+        }
+        if (mode === "centre") {
+          dispatch(setSelectedCellsPencilMarks(num));
+        }
         break;
       case e.shiftKey:
         dispatch(changeMode("corner"));
