@@ -30,12 +30,10 @@ const TimerBar = () => {
   const seconds = time % 60;
   const timeString =
     hours === 0
-      ? `${minutes.toString().padStart(2, "0")}:${seconds
+      ? `${minutes.toString()}:${seconds.toString().padStart(2, "0")}`
+      : `${hours.toString()}:${minutes.toString()}:${seconds
           .toString()
-          .padStart(2, "0")}`
-      : `${hours.toString().padStart(2, "0")}:${minutes
-          .toString()
-          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+          .padStart(2, "0")}`;
 
   return <HeaderBar>{timeString}</HeaderBar>;
 };

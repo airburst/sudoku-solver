@@ -15,7 +15,7 @@ const StyledBoard = styled.div`
   grid-template-rows: repeat(9, auto);
   grid-template-columns: repeat(9, auto);
   width: calc(100vw - 16px);
-  max-width: 760px;
+  max-width: 640px;
   max-height: calc(100vw - 16px);
   border-right: 4px solid black;
   border-bottom: 4px solid black;

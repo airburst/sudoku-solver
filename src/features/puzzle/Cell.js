@@ -37,7 +37,8 @@ const FixedContent = styled.div`
 
 const Content = styled.div`
   position: absolute;
-  color: var(--guess-color);
+  color: ${({ error }) =>
+    error ? "var(--error-color)" : "var(--guess-color)"};
 `;
 
 const PencilMark = styled.div`
@@ -62,7 +63,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
   const hasSetValue = locked && data.fixedVal !== 0;
 
   const handleClickCell = () => {
-    dispatch(selectCell({ row, col })); // Do this before setting dragging to true
+    dispatch(selectCell({ row, col }));
     dispatch(setDragging(true));
   };
   const handleMouseUp = () => dispatch(setDragging(false));
@@ -88,7 +89,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
     >
       <PencilMark>{data.pencilMarks?.join(" ")}</PencilMark>
       <CentreMark>{data.centreMarks?.join(" ")}</CentreMark>
-      {data.val > 0 && <Content>{data.val}</Content>}
+      {data.val > 0 && <Content error={data.error ? 1 : 0}>{data.val}</Content>}
       {data.fixedVal > 0 && <FixedContent>{data.fixedVal}</FixedContent>}
     </StyledCell>
   );

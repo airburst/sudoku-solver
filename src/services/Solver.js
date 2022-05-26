@@ -238,3 +238,9 @@ const solvePuzzle = (board) => {
 };
 
 export default solvePuzzle;
+
+export const checkBoard = (board) => {
+  const boardValues = extractValues(board);
+
+  return is_solved(boardValues);
+};

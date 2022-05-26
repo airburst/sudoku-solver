@@ -2,6 +2,7 @@
   --cell-size: 100px;
   --fixed-color: #262626;
   --guess-color: #4551f2;
+  --error-color: #f24556;
   --btn-color: #4551f2;
   --selected-bg-color: rgb(250, 250, 176);
 }

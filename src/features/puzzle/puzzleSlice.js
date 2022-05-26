@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
+import checkEntry from "../../services/CheckEntry";
 
 const emptyCell = {
   val: 0,
@@ -6,6 +7,7 @@ const emptyCell = {
   pencilMarks: [],
   centreMarks: [],
   selected: false,
+  error: false,
 };
 
 const emptyBoard = [...Array(9).keys()].map(() =>
@@ -65,6 +67,13 @@ export const puzzleSlice = createSlice({
       for (const [row, col] of state.selectedCells) {
         if (state.locked) {
           if (state.board[row][col].fixedVal === 0) {
+            const error = checkEntry(
+              current(state).board,
+              row,
+              col,
+              action.payload
+            );
+            state.board[row][col].error = error;
             state.board[row][col].val = action.payload;
           }
         } else {
