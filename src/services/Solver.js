@@ -224,7 +224,12 @@ const extractValues = (board) =>
   board.map((row) => row.map((cell) => cell.fixedVal || cell.val));
 
 const insertValues = (board, solution) =>
-  board.map((row, x) => row.map((col, y) => ({ ...col, val: solution[x][y] })));
+  board.map((row, x) =>
+    row.map((col, y) => {
+      const { pencilMarks, centreMarks, ...rest } = col;
+      return { ...rest, val: solution[x][y] };
+    })
+  );
 
 const solvePuzzle = (board) => {
   const boardVales = extractValues(board);
