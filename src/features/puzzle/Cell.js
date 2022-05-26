@@ -10,7 +10,7 @@ const StyledCell = styled.div`
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1rem, 6vw, 4rem);
+  font-size: clamp(2rem, 6vw, 5rem);
   outline: none;
 
   // Thick borders for (3x3) square edges
@@ -44,14 +44,14 @@ const PencilMark = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 1vw, 1rem);
   padding-left: 2px;
   color: var(--guess-color);
 `;
 
 const CentreMark = styled.div`
   position: absolute;
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 1vw, 1rem);
   color: var(--guess-color);
 `;
 
@@ -82,7 +82,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
       row={row}
       col={col}
       locked={locked}
-      tabIndex={hasSetValue ? -1 : 1}
+      tabIndex={hasSetValue ? -1 : 0}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
     >

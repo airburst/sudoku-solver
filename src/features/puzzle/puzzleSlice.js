@@ -16,7 +16,7 @@ const initialState = {
   board: emptyBoard,
   locked: false,
   selectedCells: [],
-  mode: "normal", // | "corner" | "centre"
+  mode: "setup", // "normal" | "corner" | "centre"
   isDragging: false,
 };
 
@@ -119,6 +119,7 @@ export const puzzleSlice = createSlice({
     // Put board into 'play' mode
     lockBoard: (state) => {
       state.locked = true;
+      state.mode = "normal";
       state.board.map((row) =>
         row.forEach((cell) => {
           cell.selected = false;

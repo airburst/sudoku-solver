@@ -29,20 +29,25 @@ const StyledBoard = styled.div`
 
 const PuzzleBoard = () => {
   const boardData = useSelector((state) => state.puzzle.board);
+  const locked = useSelector((state) => state.puzzle.locked);
   const mode = useSelector((state) => state.puzzle.mode);
   const dispatch = useDispatch();
 
   const handleKeyPress = (e) => {
     switch (true) {
       case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
-        dispatch(changeMode("corner"));
-        const shiftNum = parseInt(e.code.slice(5));
-        dispatch(setSelectedCellsPencilMarks(shiftNum));
+        if (locked) {
+          dispatch(changeMode("corner"));
+          const shiftNum = parseInt(e.code.slice(5));
+          dispatch(setSelectedCellsPencilMarks(shiftNum));
+        }
         break;
       case e.ctrlKey && /^Digit[0-9]$/i.test(e.code):
-        dispatch(changeMode("centre"));
-        const ctrlNum = parseInt(e.code.slice(5));
-        dispatch(setSelectedCellsPencilMarks(ctrlNum));
+        if (locked) {
+          dispatch(changeMode("centre"));
+          const ctrlNum = parseInt(e.code.slice(5));
+          dispatch(setSelectedCellsPencilMarks(ctrlNum));
+        }
         break;
       case /^Digit[0-9]$/i.test(e.code):
         const num = parseInt(e.code.slice(5));
