@@ -37,14 +37,11 @@ const Controls = () => {
   const mode = useSelector((state) => state.puzzle.mode);
 
   const setValue = (val) => {
-    if (mode === "normal") {
-      dispatch(setSelectedCellsValue(Number(val)));
+    if (mode === "normal" || mode === "setup") {
+      dispatch(setSelectedCellsValue(val));
     }
-    if (mode === "corner") {
+    if (mode === "corner" || mode === "centre") {
       dispatch(setSelectedCellsPencilMarks(val));
-    }
-    if (mode === "centre") {
-      dispatch(setSelectedCellsPencilMarks(val)); // FIXME:
     }
   };
   const setMode = (m) => dispatch(changeMode(m));

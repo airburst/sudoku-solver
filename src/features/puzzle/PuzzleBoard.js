@@ -50,13 +50,10 @@ const PuzzleBoard = () => {
         break;
       case /^Digit[0-9]$/i.test(e.code):
         const num = parseInt(e.code.slice(5));
-        if (mode === "normal") {
+        if (mode === "normal" || mode === "setup") {
           dispatch(setSelectedCellsValue(num));
-        }
-        if (mode === "corner") {
-          dispatch(setSelectedCellsPencilMarks(num));
-        }
-        if (mode === "centre") {
+        } else {
+          // Centre or corner pencil marks
           dispatch(setSelectedCellsPencilMarks(num));
         }
         break;
