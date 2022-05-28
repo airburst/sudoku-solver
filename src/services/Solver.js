@@ -227,7 +227,7 @@ const insertValues = (board, solution) =>
   board.map((row, x) =>
     row.map((col, y) => {
       const { pencilMarks, centreMarks, ...rest } = col;
-      return { ...rest, val: solution[x][y] };
+      return { ...rest, val: solution[x][y], error: false };
     })
   );
 

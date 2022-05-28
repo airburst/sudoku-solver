@@ -143,7 +143,18 @@ export const puzzleSlice = createSlice({
     setDragging: (state, action) => {
       state.isDragging = action.payload;
     },
-    restart: () => initialState,
+    restart: (state) => {
+      state.board.map((row) =>
+        row.forEach((cell) => {
+          cell.val = 0;
+          cell.selected = false;
+          cell.pencilMarks = [];
+          cell.centreMarks = [];
+          cell.error = false;
+        })
+      );
+    },
+    reset: () => initialState,
   },
 });
 
@@ -159,6 +170,7 @@ export const {
   move,
   changeMode,
   restart,
+  reset,
   setDragging,
 } = puzzleSlice.actions;
 
