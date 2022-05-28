@@ -15,13 +15,17 @@ const StyledCell = styled.div`
 
   // Thick borders for (3x3) square edges
   border-top: ${({ row }) =>
-    row % 3 === 0 ? "4px solid black" : "1px solid black"};
+    row % 3 === 0 ? "4px solid black" : "1px solid var(--cell-border)"};
   border-left: ${({ col }) =>
-    col % 3 === 0 ? "4px solid black" : "1px solid black"};
+    col % 3 === 0 ? "4px solid black" : "1px solid var(--cell-border)"};
 
   cursor: ${({ hasSetValue }) => (hasSetValue ? "default" : "pointer")};
-  background-color: ${({ selected }) =>
-    selected ? "var(--selected-bg-color)" : "white"};
+  background-color: ${({ selected, fixedVal }) =>
+    selected
+      ? "var(--selected-bg-color)"
+      : fixedVal
+      ? "var(--fixed-bg-color)"
+      : "white"};
 
   &::before {
     content: "";
@@ -33,6 +37,7 @@ const StyledCell = styled.div`
 const FixedContent = styled.div`
   position: absolute;
   color: var(--fixed-color);
+  font-weight: 700;
 `;
 
 const Content = styled.div`
@@ -45,14 +50,14 @@ const PencilMark = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  font-size: clamp(0.7rem, 1vw, 1rem);
+  font-size: clamp(0.7rem, 1.2vw, 1.2rem);
   padding-left: 2px;
   color: var(--guess-color);
 `;
 
 const CentreMark = styled.div`
   position: absolute;
-  font-size: clamp(0.7rem, 1vw, 1rem);
+  font-size: clamp(0.7rem, 1.2vw, 1.2rem);
   color: var(--guess-color);
 `;
 
