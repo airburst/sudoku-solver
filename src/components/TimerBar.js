@@ -31,7 +31,7 @@ const TimerBar = () => {
   const timeString =
     hours === 0
       ? `${minutes.toString()}:${seconds.toString().padStart(2, "0")}`
-      : `${hours.toString()}:${minutes.toString()}:${seconds
+      : `${hours.toString()}:${minutes.toString().padStart(2, "0")}:${seconds
           .toString()
           .padStart(2, "0")}`;
 

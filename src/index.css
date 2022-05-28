@@ -2,6 +2,7 @@
   --cell-size: 100px;
   --fixed-color: #262626;
   --guess-color: #464646;
+  --pencil-color: #6a6a6a;
   --error-color: #f24556;
   --btn-color: #4551f2;
   --selected-bg-color: rgb(250, 250, 176);
@@ -9,11 +10,13 @@
   --fixed-bg-color: #e6e6e6;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;800&display=swap");
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -37,7 +37,7 @@ const StyledCell = styled.div`
 const FixedContent = styled.div`
   position: absolute;
   color: var(--fixed-color);
-  font-weight: 700;
+  font-weight: 800;
 `;
 
 const Content = styled.div`
@@ -50,15 +50,15 @@ const PencilMark = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  font-size: clamp(0.7rem, 1.2vw, 1.2rem);
+  font-size: clamp(0.5rem, 1vw, 1rem);
   padding-left: 2px;
-  color: var(--guess-color);
+  color: var(--pencil-color);
 `;
 
 const CentreMark = styled.div`
   position: absolute;
-  font-size: clamp(0.7rem, 1.2vw, 1.2rem);
-  color: var(--guess-color);
+  font-size: clamp(0.5rem, 1vw, 1rem);
+  color: var(--pencil-color);
 `;
 
 const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
