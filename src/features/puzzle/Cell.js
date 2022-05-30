@@ -81,9 +81,9 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
   return (
     <StyledCell
       {...data}
-      onMouseDown={handleClickCell}
-      onMouseUp={handleMouseUp}
-      onMouseEnter={handleMouseOver}
+      onPointerDown={handleClickCell}
+      onPointerUp={handleMouseUp}
+      onPointerEnter={handleMouseOver}
       hasSetValue={hasSetValue}
       row={row}
       col={col}

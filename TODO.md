@@ -6,6 +6,7 @@
 
 ## Enhancements
 
+- Change click events to pointer events
 - Separate button to refresh
 - Confirm on restart button
 - Save state to localStorage: add a refresh button
