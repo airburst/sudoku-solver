@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,6 +33,13 @@ const PuzzleBoard = () => {
   const locked = useSelector((state) => state.puzzle.locked);
   const mode = useSelector((state) => state.puzzle.mode);
   const dispatch = useDispatch();
+
+  // This enables onPointerEnter to work on mobile
+  useEffect(() => {
+    document.body.addEventListener("gotpointercapture", (event) => {
+      event.target.releasePointerCapture(event.pointerId);
+    });
+  }, []);
 
   const handleKeyPress = (e) => {
     switch (true) {

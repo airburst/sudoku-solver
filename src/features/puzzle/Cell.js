@@ -83,7 +83,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }) => {
       {...data}
       onPointerDown={handleClickCell}
       onPointerUp={handleMouseUp}
-      onPointerEnter={handleMouseOver}
+      onPointerOver={handleMouseOver}
       hasSetValue={hasSetValue}
       row={row}
       col={col}
