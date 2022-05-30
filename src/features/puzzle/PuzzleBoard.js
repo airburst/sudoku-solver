@@ -20,6 +20,7 @@ const StyledBoard = styled.div`
   border-right: 4px solid black;
   border-bottom: 4px solid black;
   margin: 1rem;
+  touch-action: none; /* Prevent pull down */
 
   @media (min-width: 760px) {
     margin: auto;
