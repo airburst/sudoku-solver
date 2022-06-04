@@ -13,7 +13,7 @@ const HeaderBar = styled.div`
   font-size: 1.5rem;
 `;
 
-const TimerBar = () => {
+const TimerBar = ({ reset }) => {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
@@ -22,7 +22,13 @@ const TimerBar = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [time]);
+  }, [time, reset]);
+
+  useEffect(() => {
+    if (reset) {
+      setTime(0);
+    }
+  }, [reset]);
 
   // Convert seconds into time format hh:mm:ss
   const hours = Math.floor(time / 3600);

@@ -18,7 +18,7 @@ const Container = styled.div`
   }
 `;
 
-const Controls = () => {
+const Controls = ({ reset }) => {
   const locked = useSelector((state) => state.puzzle.locked);
 
   return (
@@ -27,7 +27,7 @@ const Controls = () => {
       {locked && (
         <>
           <PlacementControls />
-          <GameControls />
+          <GameControls resetTimer={reset} />
         </>
       )}
     </Container>

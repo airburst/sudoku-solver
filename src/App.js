@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import PuzzleBoard from "./features/puzzle/PuzzleBoard";
 import Controls from "./features/puzzle/Controls";
@@ -25,14 +26,20 @@ const Content = styled.div`
 `;
 
 function App() {
+  const [resetTimer, setResetTimer] = useState(false);
   const locked = useSelector((state) => state.puzzle.locked);
+
+  const doResetTimer = () => {
+    setResetTimer(true);
+    setTimeout(() => setResetTimer(false), 50);
+  };
 
   return (
     <Container>
-      {locked && <TimerBar />}
+      {locked && <TimerBar reset={resetTimer} />}
       <Content>
         <PuzzleBoard />
-        <Controls />
+        <Controls reset={doResetTimer} />
       </Content>
     </Container>
   );

@@ -14,15 +14,20 @@ const ButtonContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const GameControls = () => {
+const GameControls = ({ resetTimer }) => {
   const board = useSelector((state) => state.puzzle.board);
   const dispatch = useDispatch();
+
+  const doRestart = () => {
+    resetTimer(true);
+    dispatch(restart());
+  };
 
   return (
     <ButtonContainer>
       {/* <Button basic>Undo</Button>
       <Button basic>Redo</Button> */}
-      <Button basic onClick={() => dispatch(restart())}>
+      <Button basic onClick={doRestart}>
         Restart
       </Button>
       <Button basic onClick={() => dispatch(setBoard(solve(board)))}>
