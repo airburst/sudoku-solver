@@ -8,7 +8,7 @@ const HeaderBar = styled.div`
   justify-content: center;
   height: 2rem;
   background-color: var(--btn-color);
-  color: white;
+  color: #262626;
   padding-left: 1rem;
   font-size: 1.5rem;
 `;

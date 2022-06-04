@@ -8,6 +8,7 @@
 
 - Save state to localStorage: add a refresh button (redux-perist)
 - Implement Undo/redo
+- Pause/resume
 - Confirm on restart button
 - Save board to firebase and create route / redirect
 - Style edge pencil marks around border

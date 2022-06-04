@@ -16,7 +16,7 @@ const NumbersContainer = styled.div`
 
   @media (min-width: 760px) {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 4rem);
+    grid-template-rows: repeat(3, 3rem);
   }
 `;
 
@@ -24,7 +24,7 @@ const DeleteContainer = styled.div`
   height: 3rem;
 
   @media (min-width: 760px) {
-    height: 4rem;
+    // height: 3rem;
     grid-row: 4 / 4;
     grid-column: 1 / 4;
   }

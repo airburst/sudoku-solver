@@ -5,14 +5,16 @@ import PlacementControls from "./PlacementControls";
 import GameControls from "./GameControls";
 
 const Container = styled.div`
+  --max-width: 300px;
   flex: 1;
   display: flex;
   flex-direction: column;
   width: calc(100% - 1rem);
 
   @media (min-width: 760px) {
-    max-width: 320px;
+    max-width: var(--max-width);
     margin: 2rem;
+    min-height: 200px;
   }
 `;
 

@@ -23,7 +23,7 @@ const StyledBoard = styled.div`
   margin: 0.5rem;
   touch-action: none; /* Prevent pull down */
 
-  @media (min-width: 620px) {
+  @media (min-width: 760px) {
     margin: 2rem;
     max-height: calc(min(100vh, 100vw) - 6rem);
     max-width: calc(min(100vh, 100vw) - 6rem);

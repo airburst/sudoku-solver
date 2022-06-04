@@ -20,8 +20,8 @@ const GameControls = () => {
 
   return (
     <ButtonContainer>
-      <Button basic>Undo</Button>
-      <Button basic>Redo</Button>
+      {/* <Button basic>Undo</Button>
+      <Button basic>Redo</Button> */}
       <Button basic onClick={() => dispatch(restart())}>
         Restart
       </Button>

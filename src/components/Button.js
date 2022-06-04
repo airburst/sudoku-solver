@@ -4,7 +4,6 @@ const StyledButton = styled.button`
   border: 2px solid var(--btn-color);
   border-radius: 5px;
   background-color: var(--btn-color);
-  color: white;
   cursor: pointer;
   font-size: 1.5rem;
   width: 100%;
@@ -13,7 +12,7 @@ const StyledButton = styled.button`
   padding: ${({ size }) => (size === "large" ? "0.5rem 2rem" : "0.5rem")};
   background-color: ${({ primary }) =>
     !!primary ? "var(--btn-color)" : "white"};
-  color: ${({ primary }) => (!!primary ? "white" : "var(--btn-color)")};
+  color: ${({ primary }) => (!!primary ? "#262626" : "#464646")};
 `;
 
 const Button = (props) => {
