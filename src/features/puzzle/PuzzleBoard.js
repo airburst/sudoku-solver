@@ -30,6 +30,17 @@ const StyledBoard = styled.div`
   }
 `;
 
+const cycleMode = (mode) => {
+  switch (mode) {
+    case "normal":
+      return "corner";
+    case "corner":
+      return "centre";
+    default:
+      return "normal";
+  }
+};
+
 const PuzzleBoard = () => {
   const boardData = useSelector((state) => state.puzzle.board);
   const locked = useSelector((state) => state.puzzle.locked);
@@ -84,12 +95,15 @@ const PuzzleBoard = () => {
       case e.key === "Enter" || e.key === "Escape":
         dispatch(clearSelectedCells());
         break;
+      case e.code === "Space":
+        dispatch(changeMode(cycleMode(mode)));
+        break;
       default:
         break;
     }
   };
 
-  const handleKeyUp = () => dispatch(changeMode("normal"));
+  // const handleKeyUp = () => dispatch(changeMode("normal"));
 
   return (
     <StyledBoard>
@@ -101,7 +115,7 @@ const PuzzleBoard = () => {
             col={colIndex}
             data={cell}
             onKeyDown={handleKeyPress}
-            onKeyUp={handleKeyUp}
+            // onKeyUp={handleKeyUp}
           />
         ))
       )}

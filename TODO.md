@@ -6,8 +6,7 @@
 
 ## Enhancements
 
-- Spacebar cycles candidate mode
-- Save state to localStorage: add a refresh button
+- Save state to localStorage: add a refresh button (redux-perist)
 - Implement Undo/redo
 - Confirm on restart button
 - Save board to firebase and create route / redirect
