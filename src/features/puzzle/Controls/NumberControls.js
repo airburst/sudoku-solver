@@ -1,39 +1,48 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
-import solve from "../../../services/Solver";
 import { useSelector, useDispatch } from "react-redux";
 import {
   lockBoard,
   setSelectedCellsValue,
   setSelectedCellsPencilMarks,
-  changeMode,
-  setBoard,
 } from "../puzzleSlice";
 
-const ButtonContainer = styled.div`
+const NumbersContainer = styled.div`
   display: grid;
-  grid-template-columns: ${({ locked }) =>
-    locked ? "8rem 3rem 3rem 3rem" : "repeat(3, 3rem)"};
-  grid-template-rows: repeat(4, 3rem);
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 3rem);
   grid-gap: 0.5rem;
   width: 100%;
-  margin-bottom: 1rem;
+
+  @media (min-width: 760px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 4rem);
+  }
 `;
 
-const ColSpan = styled.div`
-  grid-row: 4 / 4;
-  grid-column: 2 / 5;
+const DeleteContainer = styled.div`
+  height: 3rem;
+
+  @media (min-width: 760px) {
+    height: 4rem;
+    grid-row: 4 / 4;
+    grid-column: 1 / 4;
+  }
 `;
 
 const SaveSpan = styled.div`
-  grid-row: ${({ locked }) => (locked ? "4 / 4" : "")};
-  grid-column: ${({ locked }) => (locked ? "1 / 5" : "1 / 4")};
+  grid-row: 3 / 3;
+  grid-column: 1 / 6;
+
+  @media (min-width: 760px) {
+    grid-row: 4 / 4;
+    grid-column: 1 / 4;
+  }
 `;
 
 const Controls = () => {
   const dispatch = useDispatch();
   const locked = useSelector((state) => state.puzzle.locked);
-  const board = useSelector((state) => state.puzzle.board);
   const mode = useSelector((state) => state.puzzle.mode);
 
   const setValue = (val) => {
@@ -44,15 +53,9 @@ const Controls = () => {
       dispatch(setSelectedCellsPencilMarks(val));
     }
   };
-  const setMode = (m) => dispatch(changeMode(m));
 
   return (
-    <ButtonContainer locked={locked}>
-      {locked && (
-        <Button primary={mode === "normal"} onClick={() => setMode("normal")}>
-          Normal
-        </Button>
-      )}
+    <NumbersContainer locked={locked}>
       <Button primary onClick={() => setValue(1)}>
         1
       </Button>
@@ -62,11 +65,7 @@ const Controls = () => {
       <Button primary onClick={() => setValue(3)}>
         3
       </Button>
-      {locked && (
-        <Button primary={mode === "corner"} onClick={() => setMode("corner")}>
-          Corner
-        </Button>
-      )}
+
       <Button primary onClick={() => setValue(4)}>
         4
       </Button>
@@ -76,11 +75,6 @@ const Controls = () => {
       <Button primary onClick={() => setValue(6)}>
         6
       </Button>
-      {locked && (
-        <Button primary={mode === "centre"} onClick={() => setMode("centre")}>
-          Centre
-        </Button>
-      )}
       <Button primary onClick={() => setValue(7)}>
         7
       </Button>
@@ -90,16 +84,12 @@ const Controls = () => {
       <Button primary onClick={() => setValue(9)}>
         9
       </Button>
-      {locked && (
-        <>
-          <Button onClick={() => dispatch(setBoard(solve(board)))}>
-            Solve
-          </Button>
-          <ColSpan>
-            <Button onClick={() => setValue(0)}>Delete</Button>
-          </ColSpan>
-        </>
-      )}
+      <DeleteContainer>
+        <Button primary onClick={() => setValue(0)}>
+          X
+        </Button>
+      </DeleteContainer>
+
       {!locked && (
         <SaveSpan>
           <Button primary onClick={() => dispatch(lockBoard())}>
@@ -107,7 +97,7 @@ const Controls = () => {
           </Button>
         </SaveSpan>
       )}
-    </ButtonContainer>
+    </NumbersContainer>
   );
 };
 

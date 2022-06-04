@@ -16,8 +16,9 @@ const Content = styled.div`
   align-items: center;
   height: 100%;
 
-  @media (min-width: 912px) {
+  @media (min-width: 760px) {
     flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
   }
 `;

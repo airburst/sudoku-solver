@@ -6,7 +6,7 @@ const HeaderBar = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 48px;
+  height: 2rem;
   background-color: var(--btn-color);
   color: white;
   padding-left: 1rem;

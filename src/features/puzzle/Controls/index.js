@@ -1,16 +1,18 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import PlayControls from "./PlayControls";
+import NumberControls from "./NumberControls";
+import PlacementControls from "./PlacementControls";
 import GameControls from "./GameControls";
 
 const Container = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: calc(100% - 1rem);
 
-  @media (min-width: 912px) {
-    margin: 0 2rem;
+  @media (min-width: 760px) {
+    max-width: 320px;
+    margin: 2rem;
   }
 `;
 
@@ -19,8 +21,13 @@ const Controls = () => {
 
   return (
     <Container>
-      <PlayControls />
-      {locked && <GameControls />}
+      <NumberControls />
+      {locked && (
+        <>
+          <PlacementControls />
+          <GameControls />
+        </>
+      )}
     </Container>
   );
 };

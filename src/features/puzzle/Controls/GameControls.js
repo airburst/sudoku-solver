@@ -1,5 +1,6 @@
 // import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
+// import solve from "../../../services/Solver";
 import Button from "../../../components/Button";
 import { useDispatch } from "react-redux";
 import { restart } from "../puzzleSlice";
@@ -10,6 +11,7 @@ const ButtonContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(2, 3rem);
   grid-gap: 0.5rem;
+  margin-top: 1rem;
 `;
 
 const GameControls = () => {

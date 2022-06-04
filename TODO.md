@@ -6,12 +6,10 @@
 
 ## Enhancements
 
-- Change click events to pointer events
-- Separate button to refresh
-- Confirm on restart button
+- Spacebar cycles candidate mode
 - Save state to localStorage: add a refresh button
+- Implement Undo/redo
+- Confirm on restart button
 - Save board to firebase and create route / redirect
-
-- Fetch puzzles from "https://nine.websudoku.com/?level=2"
 - Style edge pencil marks around border
 - Refactor solver code

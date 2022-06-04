@@ -11,20 +11,22 @@ import {
 } from "./puzzleSlice";
 
 const StyledBoard = styled.div`
-  flex-grow: 1;
+  flex: 1;
   display: grid;
   grid-template-rows: repeat(9, auto);
   grid-template-columns: repeat(9, auto);
-  width: calc(100vw - 16px);
-  max-width: 640px;
-  max-height: calc(100vw - 16px);
+  width: calc(min(100vh, 100vw) - 1rem);
+  max-height: calc(min(100vh, 100vw) - 1rem);
+  max-width: calc(min(100vh, 100vw) - 1rem);
   border-right: 4px solid black;
   border-bottom: 4px solid black;
-  margin: 1rem;
+  margin: 0.5rem;
   touch-action: none; /* Prevent pull down */
 
-  @media (min-width: 760px) {
-    margin: auto;
+  @media (min-width: 620px) {
+    margin: 2rem;
+    max-height: calc(min(100vh, 100vw) - 6rem);
+    max-width: calc(min(100vh, 100vw) - 6rem);
   }
 `;
 
