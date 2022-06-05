@@ -1,4 +1,3 @@
-// import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import solve from "../../../services/Solver";
 import Button from "../../../components/Button";
@@ -14,20 +13,15 @@ const ButtonContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const GameControls = ({ resetTimer }) => {
+const GameControls = () => {
   const board = useSelector((state) => state.puzzle.board);
   const dispatch = useDispatch();
-
-  const doRestart = () => {
-    resetTimer(true);
-    dispatch(restart());
-  };
 
   return (
     <ButtonContainer>
       {/* <Button basic>Undo</Button>
       <Button basic>Redo</Button> */}
-      <Button basic onClick={doRestart}>
+      <Button basic onClick={() => dispatch(restart())}>
         Restart
       </Button>
       <Button basic onClick={() => dispatch(setBoard(solve(board)))}>

@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
+import PauseButton from "./PauseButton";
+import { useSelector, useDispatch } from "react-redux";
+import { incrementClock, pause } from "../features/puzzle/puzzleSlice";
 
 const HeaderBar = styled.div`
   display: flex;
@@ -13,27 +16,23 @@ const HeaderBar = styled.div`
   font-size: 1.5rem;
 `;
 
-const TimerBar = ({ reset }) => {
-  const [time, setTime] = useState(0);
+const TimerBar = () => {
+  const clock = useSelector((state) => state.puzzle.clock);
+  const paused = useSelector((state) => state.puzzle.paused);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(time + 1);
-    }, 1000);
+    if (!paused) {
+      const timer = setInterval(() => dispatch(incrementClock()), 1000);
 
-    return () => clearInterval(timer);
-  }, [time, reset]);
-
-  useEffect(() => {
-    if (reset) {
-      setTime(0);
+      return () => clearInterval(timer);
     }
-  }, [reset]);
+  }, [dispatch, paused]);
 
   // Convert seconds into time format hh:mm:ss
-  const hours = Math.floor(time / 3600);
-  const minutes = Math.floor((time % 3600) / 60);
-  const seconds = time % 60;
+  const hours = Math.floor(clock / 3600);
+  const minutes = Math.floor((clock % 3600) / 60);
+  const seconds = clock % 60;
   const timeString =
     hours === 0
       ? `${minutes.toString()}:${seconds.toString().padStart(2, "0")}`
@@ -41,7 +40,12 @@ const TimerBar = ({ reset }) => {
           .toString()
           .padStart(2, "0")}`;
 
-  return <HeaderBar>{timeString}</HeaderBar>;
+  return (
+    <HeaderBar>
+      {timeString}
+      <PauseButton onClick={() => dispatch(pause())} />
+    </HeaderBar>
+  );
 };
 
 export default TimerBar;

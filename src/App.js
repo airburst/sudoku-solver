@@ -1,9 +1,10 @@
-import { useState } from "react";
 import styled from "styled-components";
 import PuzzleBoard from "./features/puzzle/PuzzleBoard";
 import Controls from "./features/puzzle/Controls";
 import TimerBar from "./components/TimerBar";
-import { useSelector } from "react-redux";
+import PauseScreen from "./components/PauseScreen";
+import { useSelector, useDispatch } from "react-redux";
+import { resume } from "./features/puzzle/puzzleSlice";
 
 const Container = styled.div`
   display: flex;
@@ -26,21 +27,20 @@ const Content = styled.div`
 `;
 
 function App() {
-  const [resetTimer, setResetTimer] = useState(false);
   const locked = useSelector((state) => state.puzzle.locked);
+  const paused = useSelector((state) => state.puzzle.paused);
+  const dispatch = useDispatch();
 
-  const doResetTimer = () => {
-    setResetTimer(true);
-    setTimeout(() => setResetTimer(false), 50);
-  };
+  const resumePuzzle = () => dispatch(resume());
 
   return (
     <Container>
-      {locked && <TimerBar reset={resetTimer} />}
+      {locked && <TimerBar />}
       <Content>
         <PuzzleBoard />
-        <Controls reset={doResetTimer} />
+        <Controls />
       </Content>
+      {paused && <PauseScreen resumePuzzle={resumePuzzle} />}
     </Container>
   );
 }

@@ -1,28 +1,5 @@
 import styled from "styled-components";
 
-const StyledButton = styled.button`
-  border: 2px solid var(--btn-color);
-  border-radius: 5px;
-  background-color: var(--btn-color);
-  cursor: pointer;
-  font-size: 1.5rem;
-  width: 100%;
-  height: 100%;
-
-  padding: ${({ size }) => (size === "large" ? "0.5rem 2rem" : "0.5rem")};
-  background-color: ${({ primary }) =>
-    !!primary ? "var(--btn-color)" : "white"};
-  color: ${({ primary }) => (!!primary ? "#262626" : "#464646")};
-`;
-
-const Button = (props) => {
-  const { children, ...otherProps } = props;
-
-  return <StyledButton {...otherProps}>{children}</StyledButton>;
-};
-
-export default Button;
-
 const PauseButtonWrapper = styled.button`
   display: flex;
   align-items: center;
@@ -31,9 +8,10 @@ const PauseButtonWrapper = styled.button`
   height: 100%;
   border: 0;
   background-color: transparent;
+  cursor: pointer;
 `;
 
-export const PauseButton = (props) => {
+const PauseButton = (props) => {
   return (
     <PauseButtonWrapper {...props}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 122.88">
@@ -42,3 +20,5 @@ export const PauseButton = (props) => {
     </PauseButtonWrapper>
   );
 };
+
+export default PauseButton;

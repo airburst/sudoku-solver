@@ -20,6 +20,8 @@ const initialState = {
   selectedCells: [],
   mode: "setup", // "normal" | "corner" | "centre"
   isDragging: false,
+  clock: 0,
+  paused: false,
 };
 
 const nextCell = (row, col, direction) => {
@@ -153,8 +155,19 @@ export const puzzleSlice = createSlice({
           cell.error = false;
         })
       );
+      state.clock = 0;
+      state.paused = false;
     },
     reset: () => initialState,
+    incrementClock: (state) => {
+      state.clock += 1;
+    },
+    pause: (state) => {
+      state.paused = true;
+    },
+    resume: (state) => {
+      state.paused = false;
+    },
   },
 });
 
@@ -172,6 +185,9 @@ export const {
   restart,
   reset,
   setDragging,
+  incrementClock,
+  pause,
+  resume,
 } = puzzleSlice.actions;
 
 export default puzzleSlice.reducer;
