@@ -56,21 +56,21 @@ const PuzzleBoard = () => {
 
   const handleKeyPress = (e) => {
     switch (true) {
-      case e.shiftKey && /^Digit[0-9]$/i.test(e.code):
+      case e.shiftKey && /^Digit[1-9]$/i.test(e.code):
         if (locked) {
           dispatch(changeMode("corner"));
           const shiftNum = parseInt(e.code.slice(5));
           dispatch(setSelectedCellsPencilMarks(shiftNum));
         }
         break;
-      case e.ctrlKey && /^Digit[0-9]$/i.test(e.code):
+      case e.ctrlKey && /^Digit[1-9]$/i.test(e.code):
         if (locked) {
           dispatch(changeMode("centre"));
           const ctrlNum = parseInt(e.code.slice(5));
           dispatch(setSelectedCellsPencilMarks(ctrlNum));
         }
         break;
-      case /^Digit[0-9]$/i.test(e.code):
+      case /^Digit[1-9]$/i.test(e.code):
         const num = parseInt(e.code.slice(5));
         if (mode === "normal" || mode === "setup") {
           dispatch(setSelectedCellsValue(num));
