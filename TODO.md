@@ -6,8 +6,8 @@
 
 ## Enhancements
 
+- Confirm on restart / reset; add Dialog component
 - Implement Undo/redo
-- Confirm on restart button
 - Save board to firebase and create route / redirect
 - Style edge pencil marks around border
 - Refactor solver code

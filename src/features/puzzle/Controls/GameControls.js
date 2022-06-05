@@ -2,7 +2,7 @@ import styled from "styled-components";
 import solve from "../../../services/Solver";
 import Button from "../../../components/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { restart, setBoard } from "../puzzleSlice";
+import { restart, reset, setBoard } from "../puzzleSlice";
 
 const ButtonContainer = styled.div`
   display: grid;
@@ -26,6 +26,9 @@ const GameControls = () => {
       </Button>
       <Button basic onClick={() => dispatch(setBoard(solve(board)))}>
         Solve
+      </Button>
+      <Button basic onClick={() => dispatch(reset())}>
+        Reset
       </Button>
       {/* <Button basic>Check</Button> */}
     </ButtonContainer>
