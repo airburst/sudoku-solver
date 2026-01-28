@@ -50,7 +50,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
     <div
       className={cn(
         "relative flex flex-wrap items-center justify-center",
-        "text-[clamp(1.6rem,6vw,3rem)] outline-none box-border",
+        "text-[clamp(1.6rem,6vw,6rem)] outline-none box-border",
         "aspect-square",
         borderTopClass,
         borderLeftClass,

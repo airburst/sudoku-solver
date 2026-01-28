@@ -24,7 +24,7 @@ function App() {
       <div
         className="grid h-full p-2 gap-2
                    grid-rows-[min(calc(100vw-1rem),calc(100%-1rem))_1fr] grid-cols-1 justify-items-center
-                   md:p-8 md:gap-8 md:grid-rows-1 md:grid-cols-[minmax(0,calc(100%-14rem))_minmax(12rem,auto)]"
+                   md:p-8 md:gap-8 md:grid-rows-1 md:grid-cols-[3fr_minmax(14rem,1fr)]"
       >
         <div className="@container h-full w-full flex items-start justify-center">
           <PuzzleBoard />
