@@ -3,6 +3,7 @@ import PuzzleBoard from "@/features/puzzle/PuzzleBoard";
 import Controls from "@/features/puzzle/Controls";
 import TimerBar from "@/components/TimerBar";
 import PauseScreen from "@/components/PauseScreen";
+import ImportModal from "@/features/puzzle/Import";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { resume } from "@/features/puzzle/puzzleSlice";
 
@@ -25,6 +26,7 @@ function App() {
         <Controls />
       </div>
       {paused && <PauseScreen resumePuzzle={resumePuzzle} />}
+      <ImportModal />
     </div>
   );
 }
