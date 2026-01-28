@@ -5,9 +5,14 @@ import Button from "@/components/Button";
 interface CameraCaptureProps {
   onCapture: (imageData: string) => void;
   onCancel: () => void;
+  error?: string | null;
 }
 
-const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
+const CameraCapture = ({
+  onCapture,
+  onCancel,
+  error: externalError,
+}: CameraCaptureProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -96,6 +101,12 @@ const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
           <X size={24} />
         </button>
       </div>
+
+      {externalError && (
+        <div className="bg-error/10 border border-error rounded p-3">
+          <p className="text-error text-sm">{externalError}</p>
+        </div>
+      )}
 
       {cameraError ? (
         <div className="flex flex-col gap-4 items-center py-8">

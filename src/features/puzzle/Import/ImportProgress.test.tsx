@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import importReducer from "@/features/import/importSlice";
+import importReducer, { type ImportState } from "@/features/import/importSlice";
 import ImportProgress from "./ImportProgress";
 
-function renderWithStore(progress: number, importState = "processing" as const) {
+function renderWithStore(progress: number, importState: ImportState = "processing") {
   const store = configureStore({
     reducer: { import: importReducer },
     preloadedState: {
