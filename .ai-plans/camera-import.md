@@ -1,19 +1,28 @@
 # Camera-Based Sudoku Puzzle Import
 
-Capture a photo of a newspaper sudoku puzzle, use OpenCV.js for grid detection and Tesseract.js for digit recognition (all on-device), with lazy loading, progress feedback, and a review step before importing.
+Capture a photo of a newspaper sudoku puzzle, use OpenCV.js for grid detection and Tesseract.js (or TensorFlow.js CNN) for digit recognition (all on-device), with lazy loading, progress feedback, and a review step before importing.
+
+## Tech Stack Notes
+
+- **Preprocessing**: `@techstark/opencv-js` — best for `findContours`, `warpPerspective`, `bitwise_not`
+- **OCR**: `tesseract.js` or TensorFlow.js with small pre-trained CNN (easier to tune than OpenCV KNN)
+- **Wasm Performance**: Enable SIMD + Multithreading in opencv-js config for sub-2s processing
+- **Empty Cell Detection**: Before OCR, use pixel density / connected components on cropped cell; if below threshold, mark empty (prevents noise misread as 1/7)
 
 ## File Structure
 
 ```
+src/features/import/
+    importSlice.ts        # Redux slice for import state
 src/features/puzzle/Import/
     index.tsx             # Flow orchestrator
     CameraCapture.tsx     # Camera/file input UI
     ImportReview.tsx      # Review & correct UI
     ImportProgress.tsx    # Progress bar component
 src/services/
-    ImportLoader.ts       # Lazy loads OpenCV + Tesseract
+    ImportLoader.ts       # Lazy loads OpenCV + Tesseract/TF
     GridDetector.ts       # OpenCV grid detection
-    DigitRecognizer.ts    # Tesseract OCR
+    DigitRecognizer.ts    # OCR / CNN inference
 ```
 
 ---
@@ -28,14 +37,20 @@ Set up dependencies and infrastructure for on-demand library loading.
 
 2. **Create lazy-loader utility** — Add `src/services/ImportLoader.ts` that dynamically imports OpenCV.js only when needed, shows "Loading image tools..." on first use, then pre-initializes a Tesseract worker in the background once OpenCV is ready.
 
-3. **Extend Redux state** — Add to `src/features/puzzle/puzzleSlice.ts`: `importState: 'idle' | 'loading-libs' | 'capturing' | 'processing' | 'reviewing'`, `importProgress: number` (0-100), and actions `setImportState`, `setImportProgress`.
+3. **Create importSlice** — Add `src/features/import/importSlice.ts` with:
+   - `importState: 'idle' | 'loading-libs' | 'capturing' | 'processing' | 'reviewing'`
+   - `importProgress: number` (0-100)
+   - `recognizedDigits: Array<{value: number, confidence: number}> | null`
+   - Actions: `setImportState`, `setImportProgress`, `setRecognizedDigits`, `resetImport`
+
+4. **Register slice** — Add importSlice to `src/store.ts`.
 
 ### Acceptance Criteria
 
 - [ ] Libraries install without errors
 - [ ] `ImportLoader.loadLibraries()` returns a promise that resolves when both libs are ready
 - [ ] Subsequent calls to `loadLibraries()` return immediately (cached)
-- [ ] Redux state updates correctly through import states
+- [ ] importSlice state updates correctly through import states
 
 ---
 
@@ -52,7 +67,7 @@ Build the camera and file input interface.
 
 2. **Create progress component** — Add `src/features/puzzle/Import/ImportProgress.tsx` showing a progress bar driven by `importProgress` from Redux.
 
-3. **Add Import button** — Modify `src/features/puzzle/Controls/NumberControls.tsx` to show "Import" button when `!locked` (setup mode only).
+3. **Add Import button** — Modify `src/features/puzzle/Controls/NumberControls.tsx` to show "Import" button in separate row above Save button when `!locked` (setup mode only).
 
 4. **Create flow orchestrator** — Add `src/features/puzzle/Import/index.tsx` to manage modal visibility and coordinate between capture/progress/review states.
 
@@ -91,12 +106,13 @@ Implement OpenCV-based puzzle extraction.
 
 ## Phase 4: Digit Recognition
 
-Implement Tesseract-based OCR with progress feedback.
+Implement OCR with empty cell detection and progress feedback.
 
 ### Steps
 
 1. **Build digit recognizer** — Create `src/services/DigitRecognizer.ts` using Tesseract.js:
-   - Configure with `tessedit_char_whitelist: '123456789'`
+   - **Empty cell detection first**: Before OCR, calculate pixel density / connected components on cropped cell; if below threshold, return 0 (prevents noise misread as 1/7)
+   - Configure Tesseract with `tessedit_char_whitelist: '123456789'`
    - Process cells in batches of ~10 to keep UI responsive
    - Emit progress events after each batch
    - Return 0 for empty cells, 1-9 for detected digits
@@ -106,8 +122,8 @@ Implement Tesseract-based OCR with progress feedback.
 
 ### Acceptance Criteria
 
+- [ ] Empty cells detected via pixel density before OCR
 - [ ] Correctly recognizes printed digits 1-9
-- [ ] Empty cells return 0
 - [ ] Progress bar updates smoothly during processing
 - [ ] Each result includes confidence score (0-1)
 
