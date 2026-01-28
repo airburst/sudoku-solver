@@ -30,6 +30,13 @@ const CameraCapture = ({
   const startCamera = useCallback(async () => {
     try {
       setCameraError(null);
+
+      // Check if mediaDevices is available
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraError("Camera not supported on this device");
+        return;
+      }
+
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "environment", width: { ideal: 1280 } },
       });
@@ -39,8 +46,17 @@ const CameraCapture = ({
         videoRef.current.onloadedmetadata = () => setIsCameraReady(true);
       }
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Camera access denied";
+      // Provide user-friendly error messages
+      let message = "Could not access camera";
+      if (err instanceof Error) {
+        if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+          message = "Camera permission denied. Please allow camera access and try again.";
+        } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+          message = "No camera found on this device";
+        } else if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+          message = "Camera is in use by another app";
+        }
+      }
       setCameraError(message);
     }
   }, []);
@@ -104,8 +120,15 @@ const CameraCapture = ({
 
       {externalError && (
         <div className="bg-error/10 border border-error rounded p-3">
-          <p className="text-error text-sm">{externalError}</p>
+          <p className="text-error text-sm font-medium">Detection failed</p>
+          <p className="text-error text-sm mt-1">{externalError}</p>
         </div>
+      )}
+
+      {!externalError && !cameraError && (
+        <p className="text-guess text-sm">
+          Position the puzzle to fill the frame. Ensure good lighting and avoid glare.
+        </p>
       )}
 
       {cameraError ? (

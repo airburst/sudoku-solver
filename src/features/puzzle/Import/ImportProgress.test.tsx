@@ -55,4 +55,21 @@ describe("ImportProgress", () => {
     const progressBar = document.querySelector(".bg-selected");
     expect(progressBar).toHaveStyle({ width: "75%" });
   });
+
+  it("shows spinner when loading libs", () => {
+    renderWithStore(0, "loading-libs");
+    const spinner = document.querySelector(".animate-spin");
+    expect(spinner).toBeInTheDocument();
+  });
+
+  it("shows first-use message when loading libs", () => {
+    renderWithStore(0, "loading-libs");
+    expect(screen.getByText(/first use/i)).toBeInTheDocument();
+  });
+
+  it("hides progress bar when loading libs", () => {
+    renderWithStore(0, "loading-libs");
+    const progressBar = document.querySelector(".bg-selected");
+    expect(progressBar).not.toBeInTheDocument();
+  });
 });

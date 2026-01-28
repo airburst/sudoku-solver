@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   setImportState,
@@ -26,6 +26,14 @@ const ImportModal = () => {
 
   // Store cells outside Redux (ImageData not serializable)
   const cellsRef = useRef<ImageData[] | null>(null);
+
+  // Cleanup on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      cellsRef.current = null;
+      terminateWorker();
+    };
+  }, []);
 
   const handleCapture = useCallback(
     async (dataUrl: string) => {
@@ -64,11 +72,20 @@ const ImportModal = () => {
         dispatch(setImportState("reviewing"));
       } catch (err) {
         console.error("Import error:", err);
+
+        // Provide specific error messages
+        let errorMessage = "Failed to process image. Please try again.";
         if (err instanceof GridDetectionError) {
-          setError(err.message);
-        } else {
-          setError("Failed to process image. Please try again.");
+          errorMessage = err.message;
+        } else if (err instanceof Error) {
+          if (err.message.includes("load")) {
+            errorMessage = "Failed to load image processing tools. Check your connection and try again.";
+          } else if (err.message.includes("memory") || err.message.includes("Memory")) {
+            errorMessage = "Not enough memory to process image. Try a smaller image.";
+          }
         }
+
+        setError(errorMessage);
         dispatch(setImportState("capturing"));
       }
     },

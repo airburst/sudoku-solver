@@ -41,28 +41,30 @@ describe("CameraCapture", () => {
   });
 
   it("shows error message when camera access denied", async () => {
-    mockGetUserMedia.mockRejectedValue(new Error("Permission denied"));
+    const error = new Error("Permission denied");
+    error.name = "NotAllowedError";
+    mockGetUserMedia.mockRejectedValue(error);
 
     render(
       <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
     );
 
-    expect(await screen.findByText("Permission denied")).toBeInTheDocument();
+    expect(await screen.findByText(/Camera permission denied/)).toBeInTheDocument();
   });
 
   it("shows file input fallback when camera unavailable", async () => {
-    mockGetUserMedia.mockRejectedValue(new Error("No camera"));
+    mockGetUserMedia.mockRejectedValue(new Error("Camera error"));
 
     render(
       <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
     );
 
-    await screen.findByText(/No camera/);
+    await screen.findByText(/Could not access camera/);
     expect(screen.getByText("Select Image")).toBeInTheDocument();
   });
 
   it("handles file selection", async () => {
-    mockGetUserMedia.mockRejectedValue(new Error("No camera"));
+    mockGetUserMedia.mockRejectedValue(new Error("Camera error"));
 
     // Mock FileReader as a class
     const mockResult = "data:image/jpeg;base64,test";
@@ -79,7 +81,7 @@ describe("CameraCapture", () => {
       <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
     );
 
-    await screen.findByText(/No camera/);
+    await screen.findByText(/Could not access camera/);
 
     const file = new File(["test"], "test.jpg", { type: "image/jpeg" });
     const input = document.querySelector(
