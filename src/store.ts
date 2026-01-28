@@ -11,15 +11,18 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import puzzleReducer from "@/features/puzzle/puzzleSlice";
+import importReducer from "@/features/import/importSlice";
 
 const rootReducer = combineReducers({
   puzzle: puzzleReducer,
+  import: importReducer,
 });
 
 const persistConfig = {
   key: "sudoku-solver",
   version: 1,
   storage,
+  blacklist: ["import"], // Don't persist import state
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

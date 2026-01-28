@@ -8,3 +8,6 @@ count.txt
 .nitro
 .tanstack
 .wrangler
+
+# AI
+.claude/settings.local.json

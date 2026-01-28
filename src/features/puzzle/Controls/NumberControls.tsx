@@ -1,3 +1,4 @@
+import { Camera } from "lucide-react";
 import Button from "@/components/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
@@ -5,6 +6,7 @@ import {
   setSelectedCellsValue,
   setSelectedCellsPencilMarks,
 } from "../puzzleSlice";
+import { setImportState } from "@/features/import/importSlice";
 
 const NumberControls = () => {
   const dispatch = useAppDispatch();
@@ -59,13 +61,23 @@ const NumberControls = () => {
         </div>
       )}
 
-      {/* Save button - only in setup mode */}
+      {/* Import and Save buttons - only in setup mode */}
       {!locked && (
-        <div className="row-start-3 col-span-3 md:row-start-4">
-          <Button primary onClick={() => dispatch(lockBoard())}>
-            Save
-          </Button>
-        </div>
+        <>
+          <div className="col-span-3 h-12">
+            <Button onClick={() => dispatch(setImportState("capturing"))}>
+              <span className="flex items-center justify-center gap-2">
+                <Camera size={20} />
+                Import
+              </span>
+            </Button>
+          </div>
+          <div className="col-span-3 h-12">
+            <Button primary onClick={() => dispatch(lockBoard())}>
+              Save
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
