@@ -26,23 +26,36 @@ export async function loadLibraries(): Promise<LoadedLibraries> {
   loadingPromise = (async () => {
     console.log("[ImportLoader] Starting library load...");
 
-    // Load OpenCV first
+    // Load OpenCV first with timeout
     console.log("[ImportLoader] Importing OpenCV module...");
-    const cvModule = await import("@techstark/opencv-js");
-    console.log("[ImportLoader] OpenCV module imported, getting default...");
-    const cv = cvModule.default || cvModule;
+
+    const cvModule = await Promise.race([
+      import("@techstark/opencv-js"),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("OpenCV import timeout after 30s")), 30000)
+      ),
+    ]);
+
+    console.log("[ImportLoader] OpenCV module imported, keys:", Object.keys(cvModule));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cv = (cvModule as any).default || cvModule;
+    console.log("[ImportLoader] cv object type:", typeof cv, "cv.Mat:", typeof cv.Mat);
 
     // Wait for OpenCV to be ready (it has async initialization)
     // Check if already ready by testing if Mat constructor exists
-    console.log("[ImportLoader] Checking OpenCV ready state, cv.Mat:", typeof cv.Mat);
     if (typeof cv.Mat === "undefined") {
       console.log("[ImportLoader] Waiting for OpenCV runtime initialization...");
-      await new Promise<void>((resolve) => {
-        cv.onRuntimeInitialized = () => {
-          console.log("[ImportLoader] OpenCV runtime initialized");
-          resolve();
-        };
-      });
+      await Promise.race([
+        new Promise<void>((resolve) => {
+          cv.onRuntimeInitialized = () => {
+            console.log("[ImportLoader] OpenCV runtime initialized");
+            resolve();
+          };
+        }),
+        new Promise<void>((_, reject) =>
+          setTimeout(() => reject(new Error("OpenCV init timeout after 30s")), 30000)
+        ),
+      ]);
     } else {
       console.log("[ImportLoader] OpenCV already ready");
     }
