@@ -29,7 +29,8 @@ export async function loadLibraries(): Promise<LoadedLibraries> {
     const cv = cvModule.default || cvModule;
 
     // Wait for OpenCV to be ready (it has async initialization)
-    if (cv.onRuntimeInitialized === undefined) {
+    // Check if already ready by testing if Mat constructor exists
+    if (typeof cv.Mat === "undefined") {
       await new Promise<void>((resolve) => {
         cv.onRuntimeInitialized = () => resolve();
       });
