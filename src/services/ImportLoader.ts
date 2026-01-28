@@ -1,6 +1,7 @@
 import type { createWorker, Worker } from "tesseract.js";
 
-type OpenCVModule = typeof import("@techstark/opencv-js");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OpenCVModule = any;
 
 interface LoadedLibraries {
   cv: OpenCVModule;
@@ -9,6 +10,65 @@ interface LoadedLibraries {
 
 let cachedLibraries: LoadedLibraries | null = null;
 let loadingPromise: Promise<LoadedLibraries> | null = null;
+
+const OPENCV_CDN_URL = "https://docs.opencv.org/4.9.0/opencv.js";
+
+/**
+ * Load OpenCV.js via script tag injection.
+ * Returns a marker string - get cv from window.__opencv_cv after awaiting.
+ * (Resolving with the cv object directly blocks promise resolution due to WASM Proxy)
+ */
+function loadOpenCVScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const win = window as any;
+
+    // Check if already loaded
+    if (win.cv?.Mat) {
+      win.__opencv_cv = win.cv;
+      // setTimeout needed to avoid WASM blocking the event loop
+      setTimeout(() => resolve(), 0);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = OPENCV_CDN_URL;
+    script.async = true;
+
+    const timeoutId = setTimeout(() => {
+      reject(new Error("OpenCV load timeout after 30s"));
+    }, 30000);
+
+    script.onload = () => {
+      // OpenCV sets up cv on window, poll until WASM is ready
+      const checkReady = () => {
+        const cv = win.cv;
+        if (cv?.Mat) {
+          clearTimeout(timeoutId);
+          win.__opencv_cv = cv;
+          // setTimeout breaks out of synchronous WASM blocking
+          setTimeout(() => resolve(), 0);
+        } else if (cv?.onRuntimeInitialized !== undefined) {
+          cv.onRuntimeInitialized = () => {
+            clearTimeout(timeoutId);
+            win.__opencv_cv = cv;
+            setTimeout(() => resolve(), 0);
+          };
+        } else {
+          setTimeout(checkReady, 100);
+        }
+      };
+      checkReady();
+    };
+
+    script.onerror = () => {
+      clearTimeout(timeoutId);
+      reject(new Error("Failed to load OpenCV script"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
 
 /**
  * Lazily loads OpenCV.js and initializes a Tesseract worker.
@@ -24,59 +84,22 @@ export async function loadLibraries(): Promise<LoadedLibraries> {
   }
 
   loadingPromise = (async () => {
-    console.log("[ImportLoader] Starting library load...");
-
-    // Load OpenCV first with timeout
-    console.log("[ImportLoader] Importing OpenCV module...");
-
-    const cvModule = await Promise.race([
-      import("@techstark/opencv-js"),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("OpenCV import timeout after 30s")), 30000)
-      ),
-    ]);
-
-    console.log("[ImportLoader] OpenCV module imported, keys:", Object.keys(cvModule));
+    // Load OpenCV via script tag
+    await loadOpenCVScript();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cv = (cvModule as any).default || cvModule;
-    console.log("[ImportLoader] cv object type:", typeof cv, "cv.Mat:", typeof cv.Mat);
-
-    // Wait for OpenCV to be ready (it has async initialization)
-    // Check if already ready by testing if Mat constructor exists
-    if (typeof cv.Mat === "undefined") {
-      console.log("[ImportLoader] Waiting for OpenCV runtime initialization...");
-      await Promise.race([
-        new Promise<void>((resolve) => {
-          cv.onRuntimeInitialized = () => {
-            console.log("[ImportLoader] OpenCV runtime initialized");
-            resolve();
-          };
-        }),
-        new Promise<void>((_, reject) =>
-          setTimeout(() => reject(new Error("OpenCV init timeout after 30s")), 30000)
-        ),
-      ]);
-    } else {
-      console.log("[ImportLoader] OpenCV already ready");
-    }
+    const cv = (window as any).__opencv_cv;
 
     // Initialize Tesseract worker
-    console.log("[ImportLoader] Importing Tesseract...");
     const tesseract = await import("tesseract.js");
-    console.log("[ImportLoader] Creating Tesseract worker...");
     const createWorkerFn = tesseract.createWorker as typeof createWorker;
     const tesseractWorker = await createWorkerFn("eng", 1, {
-      // Use CDN for language data
       langPath: "https://tessdata.projectnaptha.com/4.0.0",
     });
-    console.log("[ImportLoader] Tesseract worker created");
 
     // Configure for digit recognition only
-    console.log("[ImportLoader] Configuring Tesseract parameters...");
     await tesseractWorker.setParameters({
       tessedit_char_whitelist: "123456789",
     });
-    console.log("[ImportLoader] Libraries loaded successfully");
 
     cachedLibraries = { cv, tesseractWorker };
     return cachedLibraries;

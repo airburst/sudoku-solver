@@ -1,4 +1,4 @@
-import type cv from "@techstark/opencv-js";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export interface GridDetectionResult {
   cells: ImageData[];
@@ -17,7 +17,7 @@ export class GridDetectionError extends Error {
  */
 export async function detectGrid(
   imageData: ImageData,
-  opencv: typeof cv,
+  opencv: any,
 ): Promise<GridDetectionResult> {
   const src = opencv.matFromImageData(imageData);
   const gray = new opencv.Mat();
@@ -86,12 +86,9 @@ export async function detectGrid(
 /**
  * Find the largest 4-sided contour in the image
  */
-function findLargestQuadrilateral(
-  contours: cv.MatVector,
-  opencv: typeof cv,
-): cv.Mat | null {
+function findLargestQuadrilateral(contours: any, opencv: any): any | null {
   let maxArea = 0;
-  let bestContour: cv.Mat | null = null;
+  let bestContour: any | null = null;
 
   for (let i = 0; i < contours.size(); i++) {
     const contour = contours.get(i);
@@ -121,7 +118,7 @@ function findLargestQuadrilateral(
 /**
  * Order points clockwise starting from top-left
  */
-function orderPoints(pts: cv.Mat): number[][] {
+function orderPoints(pts: any): number[][] {
   const points: number[][] = [];
   for (let i = 0; i < 4; i++) {
     points.push([pts.data32S[i * 2], pts.data32S[i * 2 + 1]]);
@@ -143,11 +140,11 @@ function orderPoints(pts: cv.Mat): number[][] {
  * Apply perspective transform to get a square image of the grid
  */
 function perspectiveTransform(
-  src: cv.Mat,
-  contour: cv.Mat,
+  src: any,
+  contour: any,
   size: number,
-  opencv: typeof cv,
-): cv.Mat {
+  opencv: any,
+): any {
   const ordered = orderPoints(contour);
 
   // Source points from the contour
@@ -197,7 +194,7 @@ function perspectiveTransform(
 /**
  * Extract 81 cell images from the warped grid
  */
-function extractCells(grid: cv.Mat, opencv: typeof cv): ImageData[] {
+function extractCells(grid: any, opencv: any): ImageData[] {
   const cells: ImageData[] = [];
   const cellSize = Math.floor(grid.cols / 9);
 
@@ -224,7 +221,7 @@ function extractCells(grid: cv.Mat, opencv: typeof cv): ImageData[] {
 /**
  * Convert OpenCV Mat to ImageData
  */
-function matToImageData(mat: cv.Mat, opencv: typeof cv): ImageData {
+function matToImageData(mat: any, opencv: any): ImageData {
   // Ensure we have RGBA format
   const rgba = new opencv.Mat();
   if (mat.channels() === 1) {
