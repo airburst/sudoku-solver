@@ -55,9 +55,9 @@ describe("ImportModal", () => {
     expect(screen.getByText("Processing image...")).toBeInTheDocument();
   });
 
-  it("renders review placeholder when reviewing", () => {
+  it("renders ImportReview when reviewing", () => {
     renderWithState("reviewing");
-    expect(screen.getByText("Review component placeholder")).toBeInTheDocument();
+    expect(screen.getByText("Review Import")).toBeInTheDocument();
   });
 
   it("has modal overlay", () => {

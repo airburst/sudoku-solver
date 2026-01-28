@@ -6,6 +6,7 @@ import {
   setRecognizedDigits,
   resetImport,
 } from "@/features/import/importSlice";
+import { setBoard } from "@/features/puzzle/puzzleSlice";
 import { loadLibraries, terminateWorker } from "@/services/ImportLoader";
 import {
   detectGrid,
@@ -15,6 +16,8 @@ import {
 import { recognizeDigits } from "@/services/DigitRecognizer";
 import CameraCapture from "./CameraCapture";
 import ImportProgress from "./ImportProgress";
+import ImportReview from "./ImportReview";
+import type { Board } from "@/types/puzzle";
 
 const ImportModal = () => {
   const dispatch = useAppDispatch();
@@ -79,6 +82,35 @@ const ImportModal = () => {
     dispatch(resetImport());
   }, [dispatch]);
 
+  const handleConfirm = useCallback(
+    async (digits: number[]) => {
+      // Convert flat array of digits to Board format
+      const board: Board = [];
+      for (let row = 0; row < 9; row++) {
+        const rowCells = [];
+        for (let col = 0; col < 9; col++) {
+          const index = row * 9 + col;
+          rowCells.push({
+            val: 0,
+            fixedVal: digits[index],
+            pencilMarks: [],
+            centreMarks: [],
+            selected: false,
+            error: false,
+          });
+        }
+        board.push(rowCells);
+      }
+
+      // Set the board and reset import state
+      dispatch(setBoard(board));
+      cellsRef.current = null;
+      await terminateWorker();
+      dispatch(resetImport());
+    },
+    [dispatch],
+  );
+
   if (importState === "idle") {
     return null;
   }
@@ -98,11 +130,7 @@ const ImportModal = () => {
       )}
 
       {importState === "reviewing" && (
-        // TODO Phase 5: ImportReview component
-        <div className="bg-white p-4 rounded-lg">
-          <p>Review component placeholder</p>
-          <button onClick={handleCancel}>Close</button>
-        </div>
+        <ImportReview onConfirm={handleConfirm} onCancel={handleCancel} />
       )}
     </div>
   );
