@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  /* Sudoku cell sizing */
+  --spacing-cell: 100px;
+  --spacing-cell-mobile: calc(100vw / 9 - 2px);
+
+  /* Colors */
+  --color-fixed: #262626;
+  --color-guess: #464646;
+  --color-pencil: #6a6a6a;
+  --color-error: #f24556;
+  --color-btn: #e6e6e6;
+  --color-selected: #ffda01;
+  --color-cell-border: #959594;
+  --color-fixed-bg: #e6e6e6;
+
+  /* Font family */
+  --font-family-sans:
+    "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+body {
+  @apply m-0 font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}

@@ -1,44 +1,50 @@
 {
   "name": "sudoku-solver",
-  "version": "0.13.0",
   "private": true,
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.8.1",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-redux": "^8.0.2",
-    "react-scripts": "5.0.1",
-    "redux-persist": "^6.0.0",
-    "styled-components": "^5.3.5",
-    "web-vitals": "^2.1.4"
-  },
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "npm run build && cd build && firebase deploy",
-    "deploy:ci": "npm run build && cd build && firebase deploy --token $FIREBASE_TOKEN"
+    "dev": "vite --port 3000",
+    "build": "vite build && tsc",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit",
+    "deploy": "bun run build && firebase deploy",
+    "deploy:ci": "bun run build && firebase deploy --token $FIREBASE_TOKEN"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-devtools": "^0.9.3",
+    "@tanstack/react-router": "^1.157.16",
+    "@tanstack/react-router-devtools": "^1.157.16",
+    "@tanstack/router-plugin": "^1.157.16",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.563.0",
+    "nitro": "latest",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@tanstack/devtools-vite": "^0.4.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "jsdom": "^27.4.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18",
+    "web-vitals": "^5.1.0"
   }
 }
