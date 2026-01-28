@@ -11,9 +11,11 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import puzzleReducer from "@/features/puzzle/puzzleSlice";
+import importReducer from "@/features/import/importSlice";
 
 const rootReducer = combineReducers({
   puzzle: puzzleReducer,
+  import: importReducer,
 });
 
 const persistConfig = {
