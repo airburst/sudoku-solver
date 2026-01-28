@@ -38,25 +38,34 @@ const ImportModal = () => {
   const handleCapture = useCallback(
     async (dataUrl: string) => {
       setError(null);
+      console.log("[Import] Starting capture processing...");
 
       try {
         // Load libraries
+        console.log("[Import] Loading libraries...");
         dispatch(setImportState("loading-libs"));
         dispatch(setImportProgress(0));
         const { cv, tesseractWorker } = await loadLibraries();
+        console.log("[Import] Libraries loaded");
 
         // Process image
+        console.log("[Import] Processing image...");
         dispatch(setImportState("processing"));
         dispatch(setImportProgress(10));
 
+        console.log("[Import] Converting dataUrl to ImageData...");
         const imageData = await imageDataFromDataUrl(dataUrl);
+        console.log("[Import] ImageData created:", imageData.width, "x", imageData.height);
         dispatch(setImportProgress(20));
 
+        console.log("[Import] Detecting grid...");
         const { cells } = await detectGrid(imageData, cv);
+        console.log("[Import] Grid detected, cells:", cells.length);
         cellsRef.current = cells;
         dispatch(setImportProgress(40));
 
         // Run digit recognition
+        console.log("[Import] Starting digit recognition...");
         const results = await recognizeDigits(
           cells,
           tesseractWorker,
@@ -66,12 +75,14 @@ const ImportModal = () => {
             dispatch(setImportProgress(overall));
           },
         );
+        console.log("[Import] Digit recognition complete");
 
         dispatch(setRecognizedDigits(results));
         dispatch(setImportProgress(100));
         dispatch(setImportState("reviewing"));
+        console.log("[Import] Processing complete, showing review");
       } catch (err) {
-        console.error("Import error:", err);
+        console.error("[Import] Error:", err);
 
         // Provide specific error messages
         let errorMessage = "Failed to process image. Please try again.";

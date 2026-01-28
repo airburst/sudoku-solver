@@ -22,6 +22,7 @@ const persistConfig = {
   key: "sudoku-solver",
   version: 1,
   storage,
+  blacklist: ["import"], // Don't persist import state
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
