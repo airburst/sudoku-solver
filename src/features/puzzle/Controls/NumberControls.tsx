@@ -21,10 +21,7 @@ const NumberControls = () => {
   };
 
   return (
-    <div
-      className="grid grid-cols-5 grid-rows-[repeat(2,3rem)] gap-2 w-full
-                 md:grid-cols-3 md:grid-rows-[repeat(3,3rem)]"
-    >
+    <div className="grid grid-cols-3 gap-2 w-full grid-rows-[repeat(3,3rem)]">
       <Button primary onClick={() => setValue(1)}>
         1
       </Button>
@@ -54,15 +51,17 @@ const NumberControls = () => {
       </Button>
 
       {/* Delete button */}
-      <div className="h-12 md:row-start-4 md:col-span-3">
-        <Button primary onClick={() => setValue(0)}>
-          X
-        </Button>
-      </div>
+      {locked && (
+        <div className="h-12 col-span-3">
+          <Button primary onClick={() => setValue(0)}>
+            X
+          </Button>
+        </div>
+      )}
 
       {/* Save button - only in setup mode */}
       {!locked && (
-        <div className="row-start-3 col-span-5 md:row-start-4 md:col-span-3">
+        <div className="row-start-3 col-span-3 md:row-start-4">
           <Button primary onClick={() => dispatch(lockBoard())}>
             Save
           </Button>

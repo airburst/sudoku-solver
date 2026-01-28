@@ -28,7 +28,7 @@ const TimerBar = () => {
 
   return (
     <div className="flex flex-row items-center justify-center h-8 bg-btn text-fixed pl-4 text-2xl">
-      {timeString}
+      <div className="w-16">{timeString}</div>
       <PauseButton onClick={() => dispatch(pause())} />
     </div>
   );

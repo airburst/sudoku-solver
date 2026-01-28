@@ -8,7 +8,7 @@ const PauseButton = ({
   return (
     <button
       className={cn(
-        "flex items-center justify-center w-8 h-full border-0 bg-transparent cursor-pointer",
+        "flex items-center justify-center w-6 h-full border-0 bg-transparent cursor-pointer",
         className,
       )}
       {...props}
