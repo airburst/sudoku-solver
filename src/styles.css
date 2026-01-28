@@ -32,6 +32,16 @@ html,
 body,
 #app {
   height: 100%;
+  height: 100dvh; /* Use dynamic viewport height for iOS Safari */
+}
+
+/* Fix iOS Safari viewport issues */
+@supports (-webkit-touch-callout: none) {
+  html,
+  body,
+  #app {
+    height: -webkit-fill-available;
+  }
 }
 
 code {

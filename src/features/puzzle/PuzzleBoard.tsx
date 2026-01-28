@@ -89,11 +89,10 @@ const PuzzleBoard = () => {
 
   return (
     <div
-      className="flex-1 grid grid-rows-[repeat(9,auto)] grid-cols-[repeat(9,auto)]
-                 w-[calc(min(100vh,100vw)-1rem)]
-                 max-h-[calc(min(100vh,100vw)-1rem)] max-w-[calc(min(100vh,100vw)-1rem)]
-                 border-r-4 border-b-4 border-black m-2 touch-none
-                 md:m-8 md:max-h-[calc(min(100vh,100vw)-6rem)] md:max-w-[calc(min(100vh,100vw)-6rem)]"
+      className="grid grid-rows-[repeat(9,1fr)] grid-cols-[repeat(9,1fr)]
+                 aspect-square w-full
+                 md:w-[min(100cqw,100cqh-1rem)] md:max-h-[calc(100cqh-1rem)]
+                 border-r-4 border-b-4 border-black touch-none"
     >
       {boardData.map((rowData, rowIndex) =>
         rowData.map((cell, colIndex) => (

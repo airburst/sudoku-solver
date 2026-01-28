@@ -21,8 +21,14 @@ function App() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {locked && <TimerBar />}
-      <div className="flex flex-col items-center h-full md:flex-row md:items-start md:justify-center">
-        <PuzzleBoard />
+      <div
+        className="grid h-full p-2 gap-2
+                   grid-rows-[min(calc(100vw-1rem),calc(100%-1rem))_1fr] grid-cols-1 justify-items-center
+                   md:p-8 md:gap-8 md:grid-rows-1 md:grid-cols-[minmax(0,calc(100%-14rem))_minmax(12rem,auto)]"
+      >
+        <div className="@container h-full w-full flex items-start justify-center">
+          <PuzzleBoard />
+        </div>
         <Controls />
       </div>
       {paused && <PauseScreen resumePuzzle={resumePuzzle} />}
