@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   setImportState,
   setImportProgress,
+  setRecognizedDigits,
   resetImport,
 } from "@/features/import/importSlice";
 import { loadLibraries, terminateWorker } from "@/services/ImportLoader";
@@ -11,6 +12,7 @@ import {
   imageDataFromDataUrl,
   GridDetectionError,
 } from "@/services/GridDetector";
+import { recognizeDigits } from "@/services/DigitRecognizer";
 import CameraCapture from "./CameraCapture";
 import ImportProgress from "./ImportProgress";
 
@@ -30,7 +32,7 @@ const ImportModal = () => {
         // Load libraries
         dispatch(setImportState("loading-libs"));
         dispatch(setImportProgress(0));
-        const { cv } = await loadLibraries();
+        const { cv, tesseractWorker } = await loadLibraries();
 
         // Process image
         dispatch(setImportState("processing"));
@@ -41,10 +43,21 @@ const ImportModal = () => {
 
         const { cells } = await detectGrid(imageData, cv);
         cellsRef.current = cells;
-        dispatch(setImportProgress(50));
+        dispatch(setImportProgress(40));
 
-        // TODO Phase 4: Run digit recognition on cells
-        // For now, go to reviewing state
+        // Run digit recognition
+        const results = await recognizeDigits(
+          cells,
+          tesseractWorker,
+          (ocrProgress) => {
+            // Map OCR progress (0-100) to overall progress (40-95)
+            const overall = 40 + Math.round(ocrProgress * 0.55);
+            dispatch(setImportProgress(overall));
+          },
+        );
+
+        dispatch(setRecognizedDigits(results));
+        dispatch(setImportProgress(100));
         dispatch(setImportState("reviewing"));
       } catch (err) {
         console.error("Import error:", err);
