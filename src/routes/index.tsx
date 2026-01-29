@@ -19,7 +19,7 @@ function App() {
   const resumePuzzle = () => dispatch(resume());
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden bg-stone-200">
       {locked && <TimerBar />}
       <div
         className="grid h-full p-2 gap-2

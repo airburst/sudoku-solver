@@ -30,18 +30,35 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
   };
 
   // Determine border classes for 3x3 grid sections
+  // Outside edges of puzzle are handled by the container
+  // and have no borders here
   const borderTopClass =
-    row % 3 === 0
-      ? "border-t-4 border-t-black"
-      : "border-t border-t-cell-border";
+    row === 0
+      ? ""
+      : row % 3 === 0
+        ? "border-t-2 border-t-neutral-black"
+        : "border-t border-t-cell-border border-t-neutral-400";
   const borderLeftClass =
-    col % 3 === 0
-      ? "border-l-4 border-l-black"
-      : "border-l border-l-cell-border";
+    col === 0
+      ? ""
+      : col % 3 === 0
+        ? "border-l-2 border-l-neutral-black"
+        : "border-l border-l-cell-border border-l-neutral-400";
+  // Corner cells are rounded on their outside corner
+  const cornerClass =
+    row === 0 && col === 0
+      ? "rounded-tl-md"
+      : row === 0 && col === 8
+        ? "rounded-tr-md"
+        : row === 8 && col === 0
+          ? "rounded-bl-md"
+          : row === 8 && col === 8
+            ? "rounded-br-md"
+            : "";
 
   // Background color
   const bgClass = data.selected
-    ? "bg-selected"
+    ? "bg-blue-300"
     : data.fixedVal
       ? "bg-fixed-bg"
       : "bg-white";
@@ -55,6 +72,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
         borderTopClass,
         borderLeftClass,
         bgClass,
+        cornerClass,
         hasSetValue ? "cursor-default" : "cursor-pointer",
       )}
       onPointerDown={handleClickCell}

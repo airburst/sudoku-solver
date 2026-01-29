@@ -15,10 +15,20 @@ const GameControls = () => {
   };
 
   return (
-    <div className="grid w-full grid-cols-2 grid-rows-[repeat(2,3rem)] gap-2 mt-4">
-      <Button onClick={() => dispatch(restart())}>Restart</Button>
-      <Button onClick={handleSolve}>Solve</Button>
+    <div className="grid w-full grid-cols-3 grid-rows-[repeat(3,4rem)] gap-2 mt-2">
+      <Button
+        onClick={() => dispatch(restart())}
+        className="flex items-center justify-center"
+      >
+        Restart
+      </Button>
       <Button onClick={() => dispatch(reset())}>Reset</Button>
+      <Button
+        onClick={handleSolve}
+        className="flex items-center justify-center"
+      >
+        Solve
+      </Button>
     </div>
   );
 };

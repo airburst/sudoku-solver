@@ -1,4 +1,4 @@
-import { Camera } from "lucide-react";
+import { Camera, Eraser, Icon, Import, Save } from "lucide-react";
 import Button from "@/components/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
@@ -22,8 +22,12 @@ const NumberControls = () => {
     }
   };
 
+  const gridRows = locked ? 4 : 5;
+
   return (
-    <div className="grid grid-cols-3 gap-2 w-full grid-rows-[repeat(3,3rem)]">
+    <div
+      className={`grid grid-cols-[repeat(3,4rem)] gap-2 grid-rows-[repeat(${gridRows},4rem)] mt-2 md:mt-0 mx-auto`}
+    >
       <Button primary onClick={() => setValue(1)}>
         1
       </Button>
@@ -54,9 +58,13 @@ const NumberControls = () => {
 
       {/* Delete button */}
       {locked && (
-        <div className="h-12 col-span-3">
-          <Button primary onClick={() => setValue(0)}>
-            X
+        <div className="col-start-2">
+          <Button
+            primary
+            onClick={() => setValue(0)}
+            className="flex items-center justify-center"
+          >
+            <Eraser size={20} />
           </Button>
         </div>
       )}
@@ -64,17 +72,26 @@ const NumberControls = () => {
       {/* Import and Save buttons - only in setup mode */}
       {!locked && (
         <>
-          <div className="col-span-3 h-12">
-            <Button onClick={() => dispatch(setImportState("capturing"))}>
-              <span className="flex items-center justify-center gap-2">
-                <Camera size={20} />
-                Import
-              </span>
+          <div>
+            <Button
+              primary
+              onClick={() => dispatch(setImportState("capturing"))}
+              className="flex items-center justify-center gap-2"
+              title="Import Puzzle"
+              aria-label="Import Puzzle"
+            >
+              <Import size={24} />
             </Button>
           </div>
-          <div className="col-span-3 h-12">
-            <Button primary onClick={() => dispatch(lockBoard())}>
-              Save
+          <div className="col-start-3">
+            <Button
+              primary
+              onClick={() => dispatch(lockBoard())}
+              className="flex items-center justify-center gap-2"
+              title="Save Puzzle"
+              aria-label="Save Puzzle"
+            >
+              <Save size={24} />
             </Button>
           </div>
         </>

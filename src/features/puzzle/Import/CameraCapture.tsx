@@ -49,11 +49,21 @@ const CameraCapture = ({
       // Provide user-friendly error messages
       let message = "Could not access camera";
       if (err instanceof Error) {
-        if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-          message = "Camera permission denied. Please allow camera access and try again.";
-        } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        if (
+          err.name === "NotAllowedError" ||
+          err.name === "PermissionDeniedError"
+        ) {
+          message =
+            "Camera permission denied. Please allow camera access and try again.";
+        } else if (
+          err.name === "NotFoundError" ||
+          err.name === "DevicesNotFoundError"
+        ) {
           message = "No camera found on this device";
-        } else if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+        } else if (
+          err.name === "NotReadableError" ||
+          err.name === "TrackStartError"
+        ) {
           message = "Camera is in use by another app";
         }
       }
@@ -128,7 +138,8 @@ const CameraCapture = ({
 
       {!externalError && !cameraError && (
         <p className="text-guess text-sm">
-          Position the puzzle to fill the frame. Ensure good lighting and avoid glare.
+          Position the puzzle to fill the frame. Ensure good lighting and avoid
+          glare.
         </p>
       )}
 
@@ -158,7 +169,7 @@ const CameraCapture = ({
 
       <canvas ref={canvasRef} className="hidden" />
 
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2 grid-rows-[4rem]">
         {!cameraError && isCameraReady && (
           <Button primary onClick={capturePhoto} className="flex-1">
             <span className="flex items-center justify-center gap-2">

@@ -10,27 +10,20 @@ const PlacementControls = () => {
   const setMode = (m: Mode) => dispatch(changeMode(m));
 
   return (
-    <div className="flex flex-row w-[calc(100%-4px)] border-2 border-btn rounded-[5px] mt-2">
+    <div className="flex flex-row mt-2 h-16">
       <Button
-        primary={mode === "normal"}
+        active={mode === "normal"}
         onClick={() => setMode("normal")}
-        className="border-0 rounded-none first:rounded-l-[3px]"
+        className="border-0 rounded-none first:rounded-l-md"
       >
         Normal
       </Button>
       <Button
-        primary={mode === "corner"}
-        onClick={() => setMode("corner")}
-        className="border-0 rounded-none border-x-2 border-x-btn"
-      >
-        Corner
-      </Button>
-      <Button
-        primary={mode === "centre"}
+        active={mode === "centre"}
         onClick={() => setMode("centre")}
-        className="border-0 rounded-none last:rounded-r-[3px]"
+        className="border-0 rounded-none last:rounded-r-md"
       >
-        Centre
+        Notes
       </Button>
     </div>
   );
