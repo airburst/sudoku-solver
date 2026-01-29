@@ -11,3 +11,4 @@ count.txt
 
 # AI
 .claude/settings.local.json
+test-results/
