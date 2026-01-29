@@ -1,4 +1,5 @@
 import type { createWorker, Worker } from "tesseract.js";
+import { PSM } from "tesseract.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OpenCVModule = any;
@@ -99,6 +100,7 @@ export async function loadLibraries(): Promise<LoadedLibraries> {
     // Configure for digit recognition only
     await tesseractWorker.setParameters({
       tessedit_char_whitelist: "123456789",
+      tessedit_pageseg_mode: PSM.SINGLE_CHAR,
     });
 
     cachedLibraries = { cv, tesseractWorker };
