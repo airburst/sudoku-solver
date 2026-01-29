@@ -1,4 +1,4 @@
-import { Camera, Eraser, Icon, Import, Save } from "lucide-react";
+import { Eraser, Import, Save } from "lucide-react";
 import Button from "@/components/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
