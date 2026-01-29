@@ -10,7 +10,7 @@ const PlacementControls = () => {
   const setMode = (m: Mode) => dispatch(changeMode(m));
 
   return (
-    <div className="flex flex-row mt-2 h-16">
+    <div className="flex flex-row col-span-2">
       <Button
         active={mode === "normal"}
         onClick={() => setMode("normal")}

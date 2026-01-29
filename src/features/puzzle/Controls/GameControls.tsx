@@ -1,7 +1,7 @@
 import solvePuzzle from "@/services/Solver";
 import Button from "@/components/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { restart, reset, setBoard } from "../puzzleSlice";
+import { reset, setBoard } from "../puzzleSlice";
 
 const GameControls = () => {
   const board = useAppSelector((state) => state.puzzle.board);
@@ -15,13 +15,13 @@ const GameControls = () => {
   };
 
   return (
-    <div className="grid w-full grid-cols-3 grid-rows-[repeat(3,4rem)] gap-2 mt-2">
-      <Button
+    <>
+      {/* <Button
         onClick={() => dispatch(restart())}
         className="flex items-center justify-center"
       >
         Restart
-      </Button>
+      </Button> */}
       <Button onClick={() => dispatch(reset())}>Reset</Button>
       <Button
         onClick={handleSolve}
@@ -29,7 +29,7 @@ const GameControls = () => {
       >
         Solve
       </Button>
-    </div>
+    </>
   );
 };
 

@@ -31,7 +31,7 @@ const NumberControls = () => {
 
   return (
     <div
-      className={`grid grid-cols-[repeat(3,4rem)] gap-2 grid-rows-[repeat(${gridRows},4rem)] mt-2 md:mt-0 mx-auto`}
+      className={`grid grid-cols-[repeat(3,3rem)] gap-2 grid-rows-[repeat(${gridRows},3rem)] mt-2 md:mt-0 mx-auto`}
     >
       <Button primary onClick={() => setValue(1)}>
         1
@@ -62,7 +62,7 @@ const NumberControls = () => {
       </Button>
 
       {/* Delete button */}
-      {locked && (
+      {/* {locked && (
         <div className="col-start-2">
           <Button
             primary
@@ -72,7 +72,7 @@ const NumberControls = () => {
             <Eraser size={20} />
           </Button>
         </div>
-      )}
+      )} */}
 
       {/* Import and Save buttons - only in setup mode */}
       {!locked && (
