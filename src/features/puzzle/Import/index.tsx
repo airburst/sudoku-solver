@@ -71,16 +71,20 @@ const ImportModal = () => {
         dispatch(setImportProgress(100));
         dispatch(setImportState("reviewing"));
       } catch (err) {
-
         // Provide specific error messages
         let errorMessage = "Failed to process image. Please try again.";
         if (err instanceof GridDetectionError) {
           errorMessage = err.message;
         } else if (err instanceof Error) {
           if (err.message.includes("load")) {
-            errorMessage = "Failed to load image processing tools. Check your connection and try again.";
-          } else if (err.message.includes("memory") || err.message.includes("Memory")) {
-            errorMessage = "Not enough memory to process image. Try a smaller image.";
+            errorMessage =
+              "Failed to load image processing tools. Check your connection and try again.";
+          } else if (
+            err.message.includes("memory") ||
+            err.message.includes("Memory")
+          ) {
+            errorMessage =
+              "Not enough memory to process image. Try a smaller image.";
           }
         }
 
@@ -109,8 +113,7 @@ const ImportModal = () => {
           rowCells.push({
             val: 0,
             fixedVal: digits[index],
-            pencilMarks: [],
-            centreMarks: [],
+            notes: [],
             selected: false,
             error: false,
           });
@@ -132,7 +135,7 @@ const ImportModal = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 p-4">
       {importState === "capturing" && (
         <CameraCapture
           onCapture={handleCapture}

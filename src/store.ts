@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
   key: "sudoku-solver",
-  version: 1,
+  version: 2,
   storage,
   blacklist: ["import"], // Don't persist import state
 };

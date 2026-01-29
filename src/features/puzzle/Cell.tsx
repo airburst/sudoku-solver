@@ -36,14 +36,14 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
     row === 0
       ? ""
       : row % 3 === 0
-        ? "border-t-2 border-t-neutral-black"
-        : "border-t border-t-cell-border border-t-neutral-400";
+        ? "border-t-2 border-t-stone-900"
+        : "border-t border-t-cell-border border-t-stone-400";
   const borderLeftClass =
     col === 0
       ? ""
       : col % 3 === 0
-        ? "border-l-2 border-l-neutral-black"
-        : "border-l border-l-cell-border border-l-neutral-400";
+        ? "border-l-2 border-l-stone-900"
+        : "border-l border-l-cell-border border-l-stone-400";
   // Corner cells are rounded on their outside corner
   const cornerClass =
     row === 0 && col === 0
@@ -82,17 +82,17 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
     >
-      {/* Pencil marks (corner) */}
-      {data.pencilMarks && data.pencilMarks.length > 0 && (
-        <div className="absolute top-0 left-0 text-[clamp(0.5rem,1vw,1rem)] pl-0.5 text-pencil">
-          {data.pencilMarks.join(" ")}
-        </div>
-      )}
-
-      {/* Centre marks */}
-      {data.centreMarks && data.centreMarks.length > 0 && (
-        <div className="absolute text-[clamp(0.5rem,1vw,1rem)] text-pencil">
-          {data.centreMarks.join(" ")}
+      {/* Notes grid */}
+      {data.notes && data.notes.length > 0 && !data.val && !data.fixedVal && (
+        <div className="grid grid-cols-3 grid-rows-3 absolute inset-0">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+            <div
+              key={n}
+              className="flex items-center justify-center text-[clamp(0.5rem,2.5vw,1.5rem)] text-stone-900 leading-none"
+            >
+              {data.notes.includes(n) ? n : ""}
+            </div>
+          ))}
         </div>
       )}
 

@@ -5,8 +5,7 @@ import checkEntry from "@/services/CheckEntry";
 const emptyCell: Cell = {
   val: 0,
   fixedVal: 0,
-  pencilMarks: [],
-  centreMarks: [],
+  notes: [],
   selected: false,
   error: false,
 };
@@ -15,8 +14,7 @@ const createEmptyBoard = (): Board =>
   [...Array(9).keys()].map(() =>
     [...Array(9).keys()].map(() => ({
       ...emptyCell,
-      pencilMarks: [],
-      centreMarks: [],
+      notes: [],
     })),
   );
 
@@ -99,9 +97,8 @@ export const puzzleSlice = createSlice({
         } else {
           state.board[row][col].fixedVal = action.payload;
         }
-        // Clear pencil marks
-        state.board[row][col].pencilMarks = [];
-        state.board[row][col].centreMarks = [];
+        // Clear notes
+        state.board[row][col].notes = [];
       }
     },
 
@@ -112,23 +109,20 @@ export const puzzleSlice = createSlice({
       state.selectedCells = [];
     },
 
-    setSelectedCellsPencilMarks: (state, action: PayloadAction<number>) => {
-      const { mode } = state;
-      const markType = mode === "centre" ? "centreMarks" : "pencilMarks";
-
+    setSelectedCellsNotes: (state, action: PayloadAction<number>) => {
       for (const [row, col] of state.selectedCells) {
         if (state.board[row][col].fixedVal > 0) {
           return;
         }
-        // If the cell has the pencil mark, remove it
-        if (state.board[row][col][markType].includes(action.payload)) {
-          state.board[row][col][markType] = state.board[row][col][
-            markType
-          ].filter((mark) => mark !== action.payload);
+        // Toggle: remove if present, add if not
+        if (state.board[row][col].notes.includes(action.payload)) {
+          state.board[row][col].notes = state.board[row][col].notes.filter(
+            (n) => n !== action.payload,
+          );
         } else {
-          state.board[row][col][markType].push(action.payload);
+          state.board[row][col].notes.push(action.payload);
         }
-        // Remove any value from cell when changing pencil marks
+        // Remove any value from cell when changing notes
         state.board[row][col].val = 0;
       }
     },
@@ -155,8 +149,7 @@ export const puzzleSlice = createSlice({
       state.board.forEach((row) =>
         row.forEach((cell) => {
           cell.selected = false;
-          cell.pencilMarks = [];
-          cell.centreMarks = [];
+          cell.notes = [];
         }),
       );
     },
@@ -174,8 +167,7 @@ export const puzzleSlice = createSlice({
         row.forEach((cell) => {
           cell.val = 0;
           cell.selected = false;
-          cell.pencilMarks = [];
-          cell.centreMarks = [];
+          cell.notes = [];
           cell.error = false;
         }),
       );
@@ -206,7 +198,7 @@ export const {
   selectCell,
   setSelectedCellsValue,
   clearSelectedCells,
-  setSelectedCellsPencilMarks,
+  setSelectedCellsNotes,
   move,
   changeMode,
   restart,

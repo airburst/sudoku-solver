@@ -4,22 +4,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   setSelectedCellsValue,
   clearSelectedCells,
-  setSelectedCellsPencilMarks,
+  setSelectedCellsNotes,
   move,
   changeMode,
 } from "./puzzleSlice";
 import type { Direction } from "@/types/puzzle";
-
-const cycleMode = (mode: string) => {
-  switch (mode) {
-    case "normal":
-      return "corner";
-    case "corner":
-      return "centre";
-    default:
-      return "normal";
-  }
-};
 
 const PuzzleBoard = () => {
   const boardData = useAppSelector((state) => state.puzzle.board);
@@ -39,18 +28,11 @@ const PuzzleBoard = () => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     switch (true) {
-      case e.shiftKey && /^Digit[1-9]$/i.test(e.code):
-        if (locked) {
-          dispatch(changeMode("corner"));
-          const shiftNum = parseInt(e.code.slice(5));
-          dispatch(setSelectedCellsPencilMarks(shiftNum));
-        }
-        break;
       case e.ctrlKey && /^Digit[1-9]$/i.test(e.code):
         if (locked) {
-          dispatch(changeMode("centre"));
+          dispatch(changeMode("notes"));
           const ctrlNum = parseInt(e.code.slice(5));
-          dispatch(setSelectedCellsPencilMarks(ctrlNum));
+          dispatch(setSelectedCellsNotes(ctrlNum));
         }
         break;
       case /^Digit[1-9]$/i.test(e.code): {
@@ -58,16 +40,10 @@ const PuzzleBoard = () => {
         if (mode === "normal" || mode === "setup") {
           dispatch(setSelectedCellsValue(num));
         } else {
-          dispatch(setSelectedCellsPencilMarks(num));
+          dispatch(setSelectedCellsNotes(num));
         }
         break;
       }
-      case e.shiftKey:
-        dispatch(changeMode("corner"));
-        break;
-      case e.ctrlKey:
-        dispatch(changeMode("centre"));
-        break;
       case /^Arrow/i.test(e.code): {
         const direction = e.code.slice(5) as Direction;
         dispatch(move(direction));
@@ -80,7 +56,9 @@ const PuzzleBoard = () => {
         dispatch(clearSelectedCells());
         break;
       case e.code === "Space":
-        dispatch(changeMode(cycleMode(mode)));
+        if (locked) {
+          dispatch(changeMode(mode === "normal" ? "notes" : "normal"));
+        }
         break;
       default:
         break;

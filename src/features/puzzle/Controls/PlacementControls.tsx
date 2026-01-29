@@ -19,8 +19,8 @@ const PlacementControls = () => {
         Normal
       </Button>
       <Button
-        active={mode === "centre"}
-        onClick={() => setMode("centre")}
+        active={mode === "notes"}
+        onClick={() => setMode("notes")}
         className="border-0 rounded-none last:rounded-r-md"
       >
         Notes

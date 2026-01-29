@@ -6,10 +6,8 @@ export interface Cell {
   val: number;
   /** Fixed/given value set during setup mode, 0 = empty */
   fixedVal: number;
-  /** Corner pencil marks (1-9) */
-  pencilMarks: number[];
-  /** Centre pencil marks (1-9) */
-  centreMarks: number[];
+  /** Notes (1-9), displayed in 3x3 grid */
+  notes: number[];
   /** Whether this cell is currently selected */
   selected: boolean;
   /** Whether this cell has an error (duplicate in row/col/box) */
@@ -25,10 +23,9 @@ export type Board = Cell[][];
  * Mode for number entry
  * - "setup": Setting up the initial puzzle (enters fixedVal)
  * - "normal": Normal solve mode (enters val)
- * - "corner": Corner pencil marks mode
- * - "centre": Centre pencil marks mode
+ * - "notes": Notes mode (displayed in 3x3 grid)
  */
-export type Mode = "setup" | "normal" | "corner" | "centre";
+export type Mode = "setup" | "normal" | "notes";
 
 /**
  * Direction for keyboard navigation

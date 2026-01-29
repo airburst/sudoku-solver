@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   lockBoard,
   setSelectedCellsValue,
-  setSelectedCellsPencilMarks,
+  setSelectedCellsNotes,
 } from "../puzzleSlice";
 import { setImportState } from "@/features/import/importSlice";
 
@@ -14,11 +14,16 @@ const NumberControls = () => {
   const mode = useAppSelector((state) => state.puzzle.mode);
 
   const setValue = (val: number) => {
+    if (val === 0) {
+      // Eraser clears both value and notes
+      dispatch(setSelectedCellsValue(0));
+      return;
+    }
     if (mode === "normal" || mode === "setup") {
       dispatch(setSelectedCellsValue(val));
     }
-    if (mode === "corner" || mode === "centre") {
-      dispatch(setSelectedCellsPencilMarks(val));
+    if (mode === "notes") {
+      dispatch(setSelectedCellsNotes(val));
     }
   };
 
