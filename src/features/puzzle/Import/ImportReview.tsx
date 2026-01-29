@@ -16,8 +16,8 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
   );
 
   // Local state for edits
-  const [editedDigits, setEditedDigits] = useState<number[]>(() =>
-    recognizedDigits?.map((c) => c.value) ?? Array(81).fill(0),
+  const [editedDigits, setEditedDigits] = useState<number[]>(
+    () => recognizedDigits?.map((c) => c.value) ?? Array(81).fill(0),
   );
   const [editingCell, setEditingCell] = useState<number | null>(null);
 
@@ -57,15 +57,17 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
 
       {/* Mini grid */}
       <div
-        className="grid grid-cols-9 border-2 border-black mx-auto"
+        className="grid grid-cols-9 border-2 border-stone-900 mx-auto"
         style={{ width: "min(100%, 320px)" }}
       >
         {editedDigits.map((digit, index) => {
           const row = Math.floor(index / 9);
           const col = index % 9;
 
-          const borderRight = col % 3 === 2 && col !== 8 ? "border-r-2 border-r-black" : "";
-          const borderBottom = row % 3 === 2 && row !== 8 ? "border-b-2 border-b-black" : "";
+          const borderRight =
+            col % 3 === 2 && col !== 8 ? "border-r-2 border-r-stone-900" : "";
+          const borderBottom =
+            row % 3 === 2 && row !== 8 ? "border-b-2 border-b-stone-900" : "";
 
           return (
             <button
@@ -78,7 +80,9 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
                 borderRight,
                 borderBottom,
                 editingCell === index && "bg-selected",
-                isLowConfidence(index) && editingCell !== index && "bg-yellow-200",
+                isLowConfidence(index) &&
+                  editingCell !== index &&
+                  "bg-yellow-200",
               )}
             >
               {digit > 0 ? digit : ""}
@@ -91,7 +95,8 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
       {editingCell !== null && (
         <div className="flex flex-col gap-2">
           <p className="text-sm text-guess text-center">
-            Select digit for cell {Math.floor(editingCell / 9) + 1},{editingCell % 9 + 1}
+            Select digit for cell {Math.floor(editingCell / 9) + 1},
+            {(editingCell % 9) + 1}
           </p>
           <div className="grid grid-cols-5 gap-1">
             <button

@@ -151,7 +151,7 @@ const CameraCapture = ({
           </p>
         </div>
       ) : (
-        <div className="relative aspect-square bg-black rounded overflow-hidden">
+        <div className="relative aspect-square bg-stone-900 rounded overflow-hidden">
           <video
             ref={videoRef}
             autoPlay
@@ -160,7 +160,7 @@ const CameraCapture = ({
             className="w-full h-full object-cover"
           />
           {!isCameraReady && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <div className="absolute inset-0 flex items-center justify-center bg-stone-900/50">
               <p className="text-white">Starting camera...</p>
             </div>
           )}

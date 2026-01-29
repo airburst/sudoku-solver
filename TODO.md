@@ -1,7 +1,6 @@
 # TODO list
 
 - Improve UI
-  - Camera import buttons
   - Desktop max screen size
   - font size for centres on mobile
 - Stop clock when solved
