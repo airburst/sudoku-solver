@@ -22,9 +22,7 @@ describe("CameraCapture", () => {
   it("renders cancel button", () => {
     mockGetUserMedia.mockRejectedValue(new Error("No camera"));
 
-    render(
-      <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
-    );
+    render(<CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />);
 
     expect(screen.getByLabelText("Cancel")).toBeInTheDocument();
   });
@@ -32,9 +30,7 @@ describe("CameraCapture", () => {
   it("calls onCancel when cancel button clicked", async () => {
     mockGetUserMedia.mockRejectedValue(new Error("No camera"));
 
-    render(
-      <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
-    );
+    render(<CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />);
 
     fireEvent.click(screen.getByLabelText("Cancel"));
     expect(mockOnCancel).toHaveBeenCalled();
@@ -45,19 +41,17 @@ describe("CameraCapture", () => {
     error.name = "NotAllowedError";
     mockGetUserMedia.mockRejectedValue(error);
 
-    render(
-      <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
-    );
+    render(<CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />);
 
-    expect(await screen.findByText(/Camera permission denied/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Camera permission denied/),
+    ).toBeInTheDocument();
   });
 
   it("shows file input fallback when camera unavailable", async () => {
     mockGetUserMedia.mockRejectedValue(new Error("Camera error"));
 
-    render(
-      <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
-    );
+    render(<CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />);
 
     await screen.findByText(/Could not access camera/);
     expect(screen.getByText("Select Image")).toBeInTheDocument();
@@ -77,9 +71,7 @@ describe("CameraCapture", () => {
     }
     vi.stubGlobal("FileReader", MockFileReader);
 
-    render(
-      <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
-    );
+    render(<CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />);
 
     await screen.findByText(/Could not access camera/);
 
@@ -102,9 +94,7 @@ describe("CameraCapture", () => {
     };
     mockGetUserMedia.mockResolvedValue(mockStream);
 
-    render(
-      <CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />,
-    );
+    render(<CameraCapture onCapture={mockOnCapture} onCancel={mockOnCancel} />);
 
     expect(mockGetUserMedia).toHaveBeenCalledWith({
       video: { facingMode: "environment", width: { ideal: 1280 } },

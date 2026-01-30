@@ -158,7 +158,11 @@ async function recognizeCell(
 
     const normalizedConfidence = confidence / 100; // Tesseract returns 0-100
 
-    if (digit >= 1 && digit <= 9 && normalizedConfidence >= MIN_OCR_CONFIDENCE) {
+    if (
+      digit >= 1 &&
+      digit <= 9 &&
+      normalizedConfidence >= MIN_OCR_CONFIDENCE
+    ) {
       return {
         value: digit,
         confidence: normalizedConfidence,

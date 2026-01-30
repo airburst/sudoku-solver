@@ -42,7 +42,7 @@ Replace corner/centre rendering with 3x3 CSS grid:
 }
 ```
 
-### 4. PlacementControls (`src/features/puzzle/Controls/PlacementControls.tsx`)
+### 4. NotesToggle (`src/features/puzzle/Controls/NotesToggle.tsx`)
 
 - Two buttons: "Normal" and "Notes"
 - "Notes" sets `mode = "notes"`
@@ -69,7 +69,7 @@ Replace corner/centre rendering with 3x3 CSS grid:
 1. `src/types/puzzle.ts`
 2. `src/features/puzzle/puzzleSlice.ts`
 3. `src/features/puzzle/Cell.tsx`
-4. `src/features/puzzle/Controls/PlacementControls.tsx`
+4. `src/features/puzzle/Controls/NotesToggle.tsx`
 5. `src/features/puzzle/PuzzleBoard.tsx`
 6. `src/features/puzzle/Controls/NumberControls.tsx`
 7. `src/store.ts`

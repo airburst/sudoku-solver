@@ -122,6 +122,7 @@ Added `MIN_OCR_CONFIDENCE = 0.5` - rejects OCR results below 50% confidence. Thi
 - Run with: `bun run test:e2e`
 
 ## Final Results (sudoku-01.jpg)
+
 - **96.3% accuracy** (78/81 correct)
 - **0 false positives**
 - **3 missed digits** (8, 9, 9 - low confidence)

@@ -44,7 +44,10 @@ function createImageData(
 }
 
 // Mock Tesseract worker
-function createMockWorker(recognizeResult: { text: string; confidence: number }) {
+function createMockWorker(recognizeResult: {
+  text: string;
+  confidence: number;
+}) {
   return {
     recognize: vi.fn().mockResolvedValue({
       data: recognizeResult,

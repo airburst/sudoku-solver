@@ -5,7 +5,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import importReducer, { type ImportState } from "@/features/import/importSlice";
 import ImportProgress from "./ImportProgress";
 
-function renderWithStore(progress: number, importState: ImportState = "processing") {
+function renderWithStore(
+  progress: number,
+  importState: ImportState = "processing",
+) {
   const store = configureStore({
     reducer: { import: importReducer },
     preloadedState: {

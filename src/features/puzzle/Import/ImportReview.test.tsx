@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import importReducer, { type RecognizedCell } from "@/features/import/importSlice";
+import importReducer, {
+  type RecognizedCell,
+} from "@/features/import/importSlice";
 import ImportReview from "./ImportReview";
 
 function createStore(recognizedDigits: RecognizedCell[] | null) {

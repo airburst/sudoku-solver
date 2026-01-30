@@ -1,11 +1,11 @@
-import { Eraser, Import, Save } from "lucide-react";
-import Button from "@/components/Button";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { Import, Save } from "lucide-react";
 import {
   lockBoard,
-  setSelectedCellsValue,
   setSelectedCellsNotes,
+  setSelectedCellsValue,
 } from "../puzzleSlice";
+import Button from "@/components/Button";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setImportState } from "@/features/import/importSlice";
 
 const NumberControls = () => {
@@ -31,7 +31,7 @@ const NumberControls = () => {
 
   return (
     <div
-      className={`grid grid-cols-[repeat(3,3rem)] gap-2 grid-rows-[repeat(${gridRows},3rem)] mt-2 md:mt-0 mx-auto`}
+      className={`grid grid-cols-[repeat(5,3rem)] gap-2 grid-rows-[repeat(${gridRows},3rem)] mt-2 lg:mt-0 mx-auto`}
     >
       <Button primary onClick={() => setValue(1)}>
         1
@@ -62,17 +62,15 @@ const NumberControls = () => {
       </Button>
 
       {/* Delete button */}
-      {/* {locked && (
-        <div className="col-start-2">
-          <Button
-            primary
-            onClick={() => setValue(0)}
-            className="flex items-center justify-center"
-          >
-            <Eraser size={20} />
-          </Button>
-        </div>
-      )} */}
+      {locked && (
+        <Button
+          primary
+          onClick={() => setValue(0)}
+          className="flex items-center justify-center"
+        >
+          X
+        </Button>
+      )}
 
       {/* Import and Save buttons - only in setup mode */}
       {!locked && (

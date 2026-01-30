@@ -20,7 +20,10 @@ describe("importSlice", () => {
 
   describe("setImportState", () => {
     it("should update importState", () => {
-      const result = importReducer(initialState, setImportState("loading-libs"));
+      const result = importReducer(
+        initialState,
+        setImportState("loading-libs"),
+      );
       expect(result.importState).toBe("loading-libs");
     });
 

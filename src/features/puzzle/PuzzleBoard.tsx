@@ -69,7 +69,7 @@ const PuzzleBoard = () => {
     <div
       className="grid grid-rows-[repeat(9,1fr)] grid-cols-[repeat(9,1fr)]
                  aspect-square w-full
-                 md:w-[min(100cqw,100cqh-1rem)] md:max-h-[calc(100cqh-1rem)]
+                 lg:w-[min(100cqw,100cqh-1rem)] lg:max-h-[calc(100cqh-1rem)]
                  touch-none border-2 rounded-md"
     >
       {boardData.map((rowData, rowIndex) =>
