@@ -9,12 +9,20 @@ import {
 } from "./puzzleSlice";
 import type { Direction } from "@/types/puzzle";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useHighlight } from "./HighlightContext";
 
 const PuzzleBoard = () => {
   const boardData = useAppSelector((state) => state.puzzle.board);
   const locked = useAppSelector((state) => state.puzzle.locked);
   const mode = useAppSelector((state) => state.puzzle.mode);
   const dispatch = useAppDispatch();
+  const { highlight, setHighlight, clearHighlight } = useHighlight();
+
+  const handleCellClick = (
+    row: number,
+    col: number,
+    cell: Parameters<typeof setHighlight>[2],
+  ) => setHighlight(row, col, cell, locked);
 
   // This enables onPointerEnter to work on mobile
   useEffect(() => {
@@ -54,6 +62,7 @@ const PuzzleBoard = () => {
         break;
       case e.key === "Enter" || e.key === "Escape":
         dispatch(clearSelectedCells());
+        clearHighlight();
         break;
       case e.code === "Space":
         if (locked) {
@@ -81,6 +90,9 @@ const PuzzleBoard = () => {
             col={colIndex}
             data={cell}
             onKeyDown={handleKeyPress}
+            highlightValue={highlight.value}
+            highlightCell={highlight.cell}
+            onCellClick={handleCellClick}
           />
         )),
       )}

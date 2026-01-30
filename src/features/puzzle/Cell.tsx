@@ -10,17 +10,48 @@ interface CellProps {
   col: number;
   onKeyDown?: (e: KeyboardEvent<HTMLDivElement>) => void;
   onKeyUp?: (e: KeyboardEvent<HTMLDivElement>) => void;
+  highlightValue?: number | null;
+  highlightCell?: { row: number; col: number } | null;
+  onCellClick?: (row: number, col: number, cell: CellType) => void;
 }
 
-const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
+const Cell = ({
+  data,
+  row = 0,
+  col = 0,
+  onKeyDown,
+  onKeyUp,
+  highlightValue,
+  highlightCell,
+  onCellClick,
+}: CellProps) => {
   const locked = useAppSelector((state) => state.puzzle.locked);
   const isDragging = useAppSelector((state) => state.puzzle.isDragging);
   const dispatch = useAppDispatch();
   const hasSetValue = locked && data.fixedVal !== 0;
 
+  // Highlight logic
+  const cellValue = data.fixedVal || data.val;
+  const isSameValue = highlightValue && cellValue === highlightValue;
+  const inHighlightRow = highlightCell?.row === row;
+  const inHighlightCol = highlightCell?.col === col;
+  const inHighlightBox =
+    highlightCell &&
+    Math.floor(row / 3) === Math.floor(highlightCell.row / 3) &&
+    Math.floor(col / 3) === Math.floor(highlightCell.col / 3);
+  const isHighlightedCell =
+    highlightCell?.row === row && highlightCell.col === col;
+
+  const overlayClass = isSameValue
+    ? "bg-highlight/50"
+    : (inHighlightRow || inHighlightCol || inHighlightBox) && !isHighlightedCell
+      ? "bg-highlight/25"
+      : null;
+
   const handleClickCell = () => {
     dispatch(selectCell({ row, col }));
     dispatch(setDragging(true));
+    onCellClick?.(row, col, data);
   };
   const handleMouseUp = () => dispatch(setDragging(false));
   const handleMouseOver = () => {
@@ -67,7 +98,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
     <div
       className={cn(
         "relative flex flex-wrap items-center justify-center",
-        "text-[clamp(1rem,7cqw,4rem)] lg:text-[clamp(1.6rem,8cqw,6rem)] outline-none box-border",
+        "text-[clamp(1rem,7cqw,4rem)] lg:text-[clamp(1.6rem,8cqw,6rem)] outline-none box-border  font-extrabold",
         "aspect-square",
         borderTopClass,
         borderLeftClass,
@@ -82,6 +113,13 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
     >
+      {/* Highlight overlay */}
+      {overlayClass && (
+        <div
+          className={cn("absolute inset-0 pointer-events-none", overlayClass)}
+        />
+      )}
+
       {/* Notes grid */}
       {data.notes.length > 0 && !data.val && !data.fixedVal && (
         <div className="grid grid-cols-3 grid-rows-3 absolute inset-0">
@@ -107,9 +145,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
 
       {/* Fixed value (given clue) */}
       {data.fixedVal > 0 && (
-        <div className="absolute text-fixed font-extrabold">
-          {data.fixedVal}
-        </div>
+        <div className="absolute text-fixed">{data.fixedVal}</div>
       )}
     </div>
   );

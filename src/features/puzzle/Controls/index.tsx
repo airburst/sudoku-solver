@@ -2,13 +2,16 @@ import NumberControls from "./NumberControls";
 import NotesToggle from "./NotesToggle";
 import UndoButton from "./UndoButton";
 import { useAppSelector } from "@/hooks/redux";
+import { useHighlight } from "../HighlightContext";
 
 const Controls = () => {
   const locked = useAppSelector((state) => state.puzzle.locked);
+  const { clearHighlight } = useHighlight();
 
   return (
     <div
       className={`grid grid-cols-[repeat(5,4rem)] gap-2 grid-rows-[repeat(3,3rem)] mt-2 lg:mt-0 mx-auto`}
+      onClick={clearHighlight}
     >
       {locked && (
         <>

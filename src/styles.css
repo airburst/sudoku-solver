@@ -6,13 +6,14 @@
   --spacing-cell-mobile: calc(100vw / 9 - 2px);
 
   /* Colors */
-  --color-fixed: #262626;
-  --color-guess: #464646;
-  --color-error: #f24556;
+  --color-fixed: oklch(14.7% 0.004 49.25);
+  --color-guess: oklch(54.6% 0.245 262.881);
+  --color-error: oklch(63.7% 0.237 25.331);
   --color-btn: #ffffff;
   --color-selected: #ffda01;
   --color-cell-border: #959594;
   --color-fixed-bg: #e6e6e6;
+  --color-highlight: #facc15;
 
   /* Font family */
   --font-family-sans:

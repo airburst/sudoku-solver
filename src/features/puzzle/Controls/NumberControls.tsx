@@ -1,4 +1,9 @@
-import { setSelectedCellsNotes, setSelectedCellsValue } from "../puzzleSlice";
+import { Save } from "lucide-react";
+import {
+  lockBoard,
+  setSelectedCellsNotes,
+  setSelectedCellsValue,
+} from "../puzzleSlice";
 import Button from "@/components/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
@@ -21,11 +26,9 @@ const NumberControls = () => {
     }
   };
 
-  const gridRows = locked ? 4 : 5;
-
   return (
     <div
-      className={`grid grid-cols-[repeat(5,4rem)] gap-2 grid-rows-[repeat(${gridRows},4rem)] mt-2 lg:mt-0 mx-auto`}
+      className={`grid grid-cols-[repeat(5,4rem)] gap-2 grid-rows-[repeat(4,4rem)] mt-2 lg:mt-0 mx-auto`}
     >
       <Button primary onClick={() => setValue(1)}>
         1
@@ -55,7 +58,7 @@ const NumberControls = () => {
         9
       </Button>
 
-      {/* Delete button */}
+      {/* Delete button (locked mode) */}
       {locked && (
         <Button
           primary
@@ -63,6 +66,17 @@ const NumberControls = () => {
           className="flex items-center justify-center"
         >
           X
+        </Button>
+      )}
+
+      {/* Save button (setup mode) */}
+      {!locked && (
+        <Button
+          primary
+          onClick={() => dispatch(lockBoard())}
+          className="flex items-center justify-center"
+        >
+          <Save size={20} />
         </Button>
       )}
     </div>

@@ -13,6 +13,7 @@ import {
 } from "@/features/puzzle/puzzleSlice";
 import { setImportState } from "@/features/import/importSlice";
 import solvePuzzle from "@/services/Solver";
+import { useHighlight } from "@/features/puzzle/HighlightContext";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -20,6 +21,12 @@ export default function Header() {
   const clock = useAppSelector((state) => state.puzzle.clock);
   const paused = useAppSelector((state) => state.puzzle.paused);
   const board = useAppSelector((state) => state.puzzle.board);
+  const { clearHighlight } = useHighlight();
+
+  const withClear = (fn: () => void) => () => {
+    clearHighlight();
+    fn();
+  };
 
   useEffect(() => {
     if (!locked || paused) return;
@@ -44,31 +51,31 @@ export default function Header() {
     {
       icon: <Save size={20} />,
       label: "Save puzzle",
-      onClick: () => dispatch(lockBoard()),
+      onClick: withClear(() => dispatch(lockBoard())),
     },
     {
       icon: <Camera size={20} />,
       label: "Capture puzzle",
-      onClick: () => dispatch(setImportState("capturing")),
+      onClick: withClear(() => dispatch(setImportState("capturing"))),
     },
   ];
 
   const playMenuItems = [
-    { icon: <Sparkles size={20} />, label: "Solve", onClick: handleSolve },
+    { icon: <Sparkles size={20} />, label: "Solve", onClick: withClear(handleSolve) },
     {
       icon: <RotateCcw size={20} />,
       label: "Start again",
-      onClick: () => dispatch(restart()),
+      onClick: withClear(() => dispatch(restart())),
     },
     {
       icon: <Plus size={20} />,
       label: "New puzzle",
-      onClick: () => dispatch(reset()),
+      onClick: withClear(() => dispatch(reset())),
     },
     {
       icon: <Camera size={20} />,
       label: "Capture puzzle",
-      onClick: () => dispatch(setImportState("capturing")),
+      onClick: withClear(() => dispatch(setImportState("capturing"))),
     },
   ];
 
@@ -82,7 +89,7 @@ export default function Header() {
           <PauseButton onClick={() => dispatch(pause())} />
         </div>
       )}
-      <div className="col-start-3 justify-end flex">
+      <div className="col-start-3 justify-end flex px-2">
         <DropdownMenu items={menuItems} />
       </div>
     </header>

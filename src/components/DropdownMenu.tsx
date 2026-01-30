@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MoreVertical } from "lucide-react";
+import type { ReactNode } from "react";
 
 export interface MenuItem {
   icon: ReactNode;
@@ -9,7 +10,7 @@ export interface MenuItem {
 }
 
 interface DropdownMenuProps {
-  items: MenuItem[];
+  items: Array<MenuItem>;
 }
 
 const DropdownMenu = ({ items }: DropdownMenuProps) => {
@@ -59,7 +60,7 @@ const DropdownMenu = ({ items }: DropdownMenuProps) => {
       <button
         ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+        className="p-2 hover:bg-stone-300 rounded-lg transition-colors"
         aria-label="Menu"
         aria-expanded={isOpen}
       >
@@ -80,7 +81,7 @@ const DropdownMenu = ({ items }: DropdownMenuProps) => {
                   item.onClick();
                   setIsOpen(false);
                 }}
-                className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 text-gray-800 text-left"
+                className="w-full px-4 py-2 flex items-center gap-3 hover:bg-stone-300 text-stone-900 text-left"
               >
                 {item.icon}
                 <span>{item.label}</span>
