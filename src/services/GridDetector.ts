@@ -61,7 +61,9 @@ export async function detectGrid(
     }
 
     // Get perspective transform to extract square grid
-    const gridSize = 450; // Output size for the grid
+    // Use larger extraction for higher-res inputs to preserve detail
+    const inputSize = Math.max(imageData.width, imageData.height);
+    const gridSize = inputSize > 1400 ? 720 : 450;
     const warped = perspectiveTransform(src, gridContour, gridSize, opencv);
 
     // Extract grid ImageData
@@ -244,34 +246,84 @@ function matToImageData(mat: any, opencv: any): ImageData {
 
 /**
  * Load an image from a data URL and return ImageData.
- * Large images are downscaled to avoid memory issues.
+ * Large images are downscaled using high-quality multi-step resize.
  */
 export async function imageDataFromDataUrl(
   dataUrl: string,
-  maxSize = 1200,
+  maxSize = 1500,
 ): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
       let { width, height } = img;
+      const needsResize = width > maxSize || height > maxSize;
 
-      // Downscale large images (e.g. iPhone photos)
-      if (width > maxSize || height > maxSize) {
-        const scale = maxSize / Math.max(width, height);
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
+      if (!needsResize) {
+        // No resize needed - draw directly
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Could not get canvas context"));
+          return;
+        }
+        ctx.drawImage(img, 0, 0);
+        resolve(ctx.getImageData(0, 0, width, height));
+        return;
       }
 
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
+      // Multi-step downscale for better quality (halve until close to target)
+      let srcCanvas = document.createElement("canvas");
+      srcCanvas.width = width;
+      srcCanvas.height = height;
+      let srcCtx = srcCanvas.getContext("2d");
+      if (!srcCtx) {
         reject(new Error("Could not get canvas context"));
         return;
       }
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(ctx.getImageData(0, 0, width, height));
+      srcCtx.drawImage(img, 0, 0);
+
+      // Step down by halves until within 2x of target
+      while (width > maxSize * 2 || height > maxSize * 2) {
+        const newWidth = Math.round(width / 2);
+        const newHeight = Math.round(height / 2);
+
+        const dstCanvas = document.createElement("canvas");
+        dstCanvas.width = newWidth;
+        dstCanvas.height = newHeight;
+        const dstCtx = dstCanvas.getContext("2d");
+        if (!dstCtx) {
+          reject(new Error("Could not get canvas context"));
+          return;
+        }
+        dstCtx.imageSmoothingEnabled = true;
+        dstCtx.imageSmoothingQuality = "high";
+        dstCtx.drawImage(srcCanvas, 0, 0, newWidth, newHeight);
+
+        srcCanvas = dstCanvas;
+        width = newWidth;
+        height = newHeight;
+      }
+
+      // Final resize to target
+      const scale = maxSize / Math.max(width, height);
+      const finalWidth = Math.round(width * scale);
+      const finalHeight = Math.round(height * scale);
+
+      const finalCanvas = document.createElement("canvas");
+      finalCanvas.width = finalWidth;
+      finalCanvas.height = finalHeight;
+      const finalCtx = finalCanvas.getContext("2d");
+      if (!finalCtx) {
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+      finalCtx.imageSmoothingEnabled = true;
+      finalCtx.imageSmoothingQuality = "high";
+      finalCtx.drawImage(srcCanvas, 0, 0, finalWidth, finalHeight);
+
+      resolve(finalCtx.getImageData(0, 0, finalWidth, finalHeight));
     };
     img.onerror = () => reject(new Error("Failed to load image"));
     img.src = dataUrl;
