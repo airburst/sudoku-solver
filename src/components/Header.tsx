@@ -1,67 +1,90 @@
-import { Link } from "@tanstack/react-router";
-
-import { useState } from "react";
-import { Home, Menu, X } from "lucide-react";
+import { useEffect } from "react";
+import { Camera, Plus, RotateCcw, Save, Sparkles } from "lucide-react";
+import DropdownMenu from "./DropdownMenu";
+import PauseButton from "./PauseButton";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {
+  incrementClock,
+  lockBoard,
+  pause,
+  reset,
+  restart,
+  setBoard,
+} from "@/features/puzzle/puzzleSlice";
+import { setImportState } from "@/features/import/importSlice";
+import solvePuzzle from "@/services/Solver";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const locked = useAppSelector((state) => state.puzzle.locked);
+  const clock = useAppSelector((state) => state.puzzle.clock);
+  const paused = useAppSelector((state) => state.puzzle.paused);
+  const board = useAppSelector((state) => state.puzzle.board);
+
+  useEffect(() => {
+    if (!locked || paused) return;
+    const timer = setInterval(() => dispatch(incrementClock()), 1000);
+    return () => clearInterval(timer);
+  }, [dispatch, locked, paused]);
+
+  const hours = Math.floor(clock / 3600);
+  const minutes = Math.floor((clock % 3600) / 60);
+  const seconds = clock % 60;
+  const timeString =
+    hours === 0
+      ? `${minutes}:${seconds.toString().padStart(2, "0")}`
+      : `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+  const handleSolve = () => {
+    const solved = solvePuzzle(board);
+    if (solved) dispatch(setBoard(solved));
+  };
+
+  const setupMenuItems = [
+    {
+      icon: <Save size={20} />,
+      label: "Save puzzle",
+      onClick: () => dispatch(lockBoard()),
+    },
+    {
+      icon: <Camera size={20} />,
+      label: "Capture puzzle",
+      onClick: () => dispatch(setImportState("capturing")),
+    },
+  ];
+
+  const playMenuItems = [
+    { icon: <Sparkles size={20} />, label: "Solve", onClick: handleSolve },
+    {
+      icon: <RotateCcw size={20} />,
+      label: "Start again",
+      onClick: () => dispatch(restart()),
+    },
+    {
+      icon: <Plus size={20} />,
+      label: "New puzzle",
+      onClick: () => dispatch(reset()),
+    },
+    {
+      icon: <Camera size={20} />,
+      label: "Capture puzzle",
+      onClick: () => dispatch(setImportState("capturing")),
+    },
+  ];
+
+  const menuItems = locked ? playMenuItems : setupMenuItems;
 
   return (
-    <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-          aria-label="Open menu"
-        >
-          <Menu size={24} />
-        </button>
-        <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
-          </Link>
-        </h1>
-      </header>
-
-      <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
-            aria-label="Close menu"
-          >
-            <X size={24} />
-          </button>
+    <header className="h-16 grid grid-cols-3 items-center bg-stone-200 text-stone-900">
+      {locked && (
+        <div className="flex items-center justify-center text-2xl col-start-2">
+          <span className="w-16">{timeString}</span>
+          <PauseButton onClick={() => dispatch(pause())} />
         </div>
-
-        <nav className="flex-1 p-4 overflow-y-auto">
-          <Link
-            to="/"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                "flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2",
-            }}
-          >
-            <Home size={20} />
-            <span className="font-medium">Home</span>
-          </Link>
-
-          {/* Demo Links Start */}
-
-          {/* Demo Links End */}
-        </nav>
-      </aside>
-    </>
+      )}
+      <div className="col-start-3 justify-end flex">
+        <DropdownMenu items={menuItems} />
+      </div>
+    </header>
   );
 }
