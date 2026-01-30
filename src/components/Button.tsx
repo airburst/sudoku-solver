@@ -1,5 +1,5 @@
-import { cn } from "@/lib/cn";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -21,7 +21,7 @@ const Button = ({
       className={cn(
         "border-2 border-btn rounded-md cursor-pointer text-2xl w-full h-full shadow-md",
         size === "large" ? "py-2 px-8" : "py-2",
-        primary ? "bg-btn text-fixed" : "bg-white text-guess",
+        primary ? "bg-btn text-fixed" : "bg-white text-stone-900",
         active ? "bg-blue-200" : "bg-white",
         className,
       )}

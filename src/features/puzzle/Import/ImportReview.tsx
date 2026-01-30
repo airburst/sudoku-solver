@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { cn } from "@/lib/cn";
 import { useAppSelector } from "@/hooks/redux";
 import Button from "@/components/Button";
 
 interface ImportReviewProps {
-  onConfirm: (digits: number[]) => void;
+  onConfirm: (digits: Array<number>) => void;
   onCancel: () => void;
 }
 
@@ -16,7 +16,7 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
   );
 
   // Local state for edits
-  const [editedDigits, setEditedDigits] = useState<number[]>(
+  const [editedDigits, setEditedDigits] = useState<Array<number>>(
     () => recognizedDigits?.map((c) => c.value) ?? Array(81).fill(0),
   );
   const [editingCell, setEditingCell] = useState<number | null>(null);
@@ -51,7 +51,7 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white rounded-lg max-w-md w-full">
       <h2 className="text-xl font-bold text-fixed">Review Import</h2>
-      <p className="text-sm text-guess">
+      <p className="text-sm text-stone-900">
         Tap any cell to correct. Yellow cells have low confidence.
       </p>
 
@@ -94,7 +94,7 @@ const ImportReview = ({ onConfirm, onCancel }: ImportReviewProps) => {
       {/* Digit input panel (shown when editing) */}
       {editingCell !== null && (
         <div className="flex flex-col gap-2">
-          <p className="text-sm text-guess text-center">
+          <p className="text-sm text-stone-900 text-center">
             Select digit for cell {Math.floor(editingCell / 9) + 1},
             {(editingCell % 9) + 1}
           </p>

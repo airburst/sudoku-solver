@@ -1,8 +1,8 @@
+import { useHighlight } from "../HighlightContext";
 import NumberControls from "./NumberControls";
 import NotesToggle from "./NotesToggle";
 import UndoButton from "./UndoButton";
 import { useAppSelector } from "@/hooks/redux";
-import { useHighlight } from "../HighlightContext";
 
 const Controls = () => {
   const locked = useAppSelector((state) => state.puzzle.locked);

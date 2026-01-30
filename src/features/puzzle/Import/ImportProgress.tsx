@@ -24,7 +24,7 @@ const ImportProgress = ({
       </div>
 
       {isLoadingLibs ? (
-        <p className="text-guess text-sm text-center">
+        <p className="text-stone-900 text-sm text-center">
           This may take a moment on first use...
         </p>
       ) : (
@@ -35,7 +35,9 @@ const ImportProgress = ({
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-guess text-sm text-center">{progress}% complete</p>
+          <p className="text-stone-900 text-sm text-center">
+            {progress}% complete
+          </p>
         </>
       )}
     </div>

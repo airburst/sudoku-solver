@@ -243,24 +243,35 @@ function matToImageData(mat: any, opencv: any): ImageData {
 }
 
 /**
- * Load an image from a data URL and return ImageData
+ * Load an image from a data URL and return ImageData.
+ * Large images are downscaled to avoid memory issues.
  */
 export async function imageDataFromDataUrl(
   dataUrl: string,
+  maxSize = 1200,
 ): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
+      let { width, height } = img;
+
+      // Downscale large images (e.g. iPhone photos)
+      if (width > maxSize || height > maxSize) {
+        const scale = maxSize / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+
       const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = width;
+      canvas.height = height;
       const ctx = canvas.getContext("2d");
       if (!ctx) {
         reject(new Error("Could not get canvas context"));
         return;
       }
-      ctx.drawImage(img, 0, 0);
-      resolve(ctx.getImageData(0, 0, img.width, img.height));
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(ctx.getImageData(0, 0, width, height));
     };
     img.onerror = () => reject(new Error("Failed to load image"));
     img.src = dataUrl;

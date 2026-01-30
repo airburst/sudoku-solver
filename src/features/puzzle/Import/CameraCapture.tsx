@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import Button from "@/components/Button";
 
@@ -32,7 +32,8 @@ const CameraCapture = ({
       setCameraError(null);
 
       // Check if mediaDevices is available
-      if (!navigator.mediaDevices?.getUserMedia) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!navigator.mediaDevices.getUserMedia) {
         setCameraError("Camera not supported on this device");
         return;
       }
@@ -74,8 +75,7 @@ const CameraCapture = ({
   useEffect(() => {
     startCamera();
     return () => stopCamera();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
-  }, []);
+  }, [startCamera, stopCamera]);
 
   const capturePhoto = useCallback(() => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -137,7 +137,7 @@ const CameraCapture = ({
       )}
 
       {!externalError && !cameraError && (
-        <p className="text-guess text-sm">
+        <p className="text-stone-900 text-sm">
           Position the puzzle to fill the frame. Ensure good lighting and avoid
           glare.
         </p>
@@ -146,7 +146,7 @@ const CameraCapture = ({
       {cameraError ? (
         <div className="flex flex-col gap-4 items-center py-8">
           <p className="text-error text-center">{cameraError}</p>
-          <p className="text-guess text-sm text-center">
+          <p className="text-stone-900 text-sm text-center">
             Use the button below to select an image instead
           </p>
         </div>
