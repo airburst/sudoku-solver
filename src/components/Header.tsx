@@ -78,7 +78,7 @@ export default function Header() {
     <header className="h-16 grid grid-cols-3 items-center bg-stone-200 text-stone-900">
       {locked && (
         <div className="flex items-center justify-center text-2xl col-start-2">
-          <span className="w-16">{timeString}</span>
+          <span className="w-24">{timeString}</span>
           <PauseButton onClick={() => dispatch(pause())} />
         </div>
       )}

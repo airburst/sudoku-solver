@@ -1,8 +1,8 @@
-import { cn } from "@/lib/cn";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { selectCell, setDragging } from "./puzzleSlice";
 import type { Cell as CellType } from "@/types/puzzle";
 import type { KeyboardEvent } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { cn } from "@/lib/cn";
 
 interface CellProps {
   data: CellType;
@@ -67,7 +67,7 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
     <div
       className={cn(
         "relative flex flex-wrap items-center justify-center",
-        "text-[clamp(1.6rem,6vw,6rem)] outline-none box-border",
+        "text-[clamp(1rem,7cqw,4rem)] lg:text-[clamp(1.6rem,8cqw,6rem)] outline-none box-border",
         "aspect-square",
         borderTopClass,
         borderLeftClass,
@@ -83,12 +83,12 @@ const Cell = ({ data, row = 0, col = 0, onKeyDown, onKeyUp }: CellProps) => {
       onKeyUp={onKeyUp}
     >
       {/* Notes grid */}
-      {data.notes && data.notes.length > 0 && !data.val && !data.fixedVal && (
+      {data.notes.length > 0 && !data.val && !data.fixedVal && (
         <div className="grid grid-cols-3 grid-rows-3 absolute inset-0">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
             <div
               key={n}
-              className="flex items-center justify-center text-[clamp(0.5rem,2.5vw,1.5rem)] text-stone-900 leading-none"
+              className="flex items-center justify-center text-[clamp(0.4rem,2cqw,1rem)] text-stone-900 leading-none"
             >
               {data.notes.includes(n) ? n : ""}
             </div>

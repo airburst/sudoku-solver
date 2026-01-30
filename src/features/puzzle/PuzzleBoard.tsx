@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import Cell from "./Cell";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
-  setSelectedCellsValue,
-  clearSelectedCells,
-  setSelectedCellsNotes,
-  move,
   changeMode,
+  clearSelectedCells,
+  move,
+  setSelectedCellsNotes,
+  setSelectedCellsValue,
 } from "./puzzleSlice";
 import type { Direction } from "@/types/puzzle";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
 const PuzzleBoard = () => {
   const boardData = useAppSelector((state) => state.puzzle.board);
@@ -19,7 +19,7 @@ const PuzzleBoard = () => {
   // This enables onPointerEnter to work on mobile
   useEffect(() => {
     const handler = (event: PointerEvent) => {
-      (event.target as Element)?.releasePointerCapture?.(event.pointerId);
+      (event.target as Element).releasePointerCapture(event.pointerId);
     };
     document.body.addEventListener("gotpointercapture", handler);
     return () =>
@@ -65,11 +65,12 @@ const PuzzleBoard = () => {
     }
   };
 
+  // Note: calc(100vh-64px-1rem) accounts for header and 1rem bottom margin
   return (
     <div
-      className="grid grid-rows-[repeat(9,1fr)] grid-cols-[repeat(9,1fr)]
-                 aspect-square w-full
-                 lg:w-[min(100cqw,100cqh-1rem)] lg:max-h-[calc(100cqh-1rem)]
+      className="grid grid-rows-9 grid-cols-9
+                 size-[min(100cqw,100cqh)]
+                 lg:size-[min(100cqw,100cqh,calc(100vh-64px-1rem))]
                  touch-none border-2 rounded-md"
     >
       {boardData.map((rowData, rowIndex) =>
