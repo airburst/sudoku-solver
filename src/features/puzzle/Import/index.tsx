@@ -36,7 +36,7 @@ const ImportModal = () => {
   }, []);
 
   const handleCapture = useCallback(
-    async (dataUrl: string) => {
+    async (dataUrl: string, orientation = 1) => {
       setError(null);
 
       try {
@@ -49,7 +49,7 @@ const ImportModal = () => {
         dispatch(setImportState("processing"));
         dispatch(setImportProgress(10));
 
-        const imageData = await imageDataFromDataUrl(dataUrl);
+        const imageData = await imageDataFromDataUrl(dataUrl, 1500, orientation);
         dispatch(setImportProgress(20));
 
         const { cells } = await detectGrid(imageData, cv);

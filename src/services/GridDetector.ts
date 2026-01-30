@@ -245,44 +245,113 @@ function matToImageData(mat: any, opencv: any): ImageData {
 }
 
 /**
+ * Apply EXIF orientation transform to canvas context.
+ * Must be called BEFORE drawing the image.
+ */
+function applyExifOrientation(
+  ctx: CanvasRenderingContext2D,
+  orientation: number,
+  width: number,
+  height: number,
+): void {
+  switch (orientation) {
+    case 2: // Flip horizontal
+      ctx.translate(width, 0);
+      ctx.scale(-1, 1);
+      break;
+    case 3: // Rotate 180
+      ctx.translate(width, height);
+      ctx.rotate(Math.PI);
+      break;
+    case 4: // Flip vertical
+      ctx.translate(0, height);
+      ctx.scale(1, -1);
+      break;
+    case 5: // Rotate 90 CW + flip horizontal
+      ctx.translate(height, 0);
+      ctx.rotate(Math.PI / 2);
+      ctx.translate(0, -height);
+      ctx.scale(1, -1);
+      break;
+    case 6: // Rotate 90 CW
+      ctx.translate(height, 0);
+      ctx.rotate(Math.PI / 2);
+      break;
+    case 7: // Rotate 90 CCW + flip horizontal
+      ctx.translate(0, width);
+      ctx.rotate(-Math.PI / 2);
+      ctx.translate(-height, 0);
+      ctx.scale(1, -1);
+      break;
+    case 8: // Rotate 270 CW (90 CCW)
+      ctx.translate(0, width);
+      ctx.rotate(-Math.PI / 2);
+      break;
+    // case 1 and default: no transform needed
+  }
+}
+
+/**
+ * Get output dimensions after applying EXIF orientation
+ */
+function getOrientedDimensions(
+  width: number,
+  height: number,
+  orientation: number,
+): { width: number; height: number } {
+  // Orientations 5-8 swap width and height
+  if (orientation >= 5 && orientation <= 8) {
+    return { width: height, height: width };
+  }
+  return { width, height };
+}
+
+/**
  * Load an image from a data URL and return ImageData.
  * Large images are downscaled using high-quality multi-step resize.
+ * Applies EXIF orientation transform if provided.
  */
 export async function imageDataFromDataUrl(
   dataUrl: string,
   maxSize = 1500,
+  orientation = 1,
 ): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
-      let { width, height } = img;
+      const origWidth = img.width;
+      const origHeight = img.height;
+
+      // Get dimensions after orientation is applied
+      const oriented = getOrientedDimensions(origWidth, origHeight, orientation);
+      let { width, height } = oriented;
+
+      // First, apply orientation to get correctly rotated image
+      const rotatedCanvas = document.createElement("canvas");
+      rotatedCanvas.width = width;
+      rotatedCanvas.height = height;
+      const rotatedCtx = rotatedCanvas.getContext("2d");
+      if (!rotatedCtx) {
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+
+      // Apply orientation transform and draw
+      if (orientation !== 1) {
+        applyExifOrientation(rotatedCtx, orientation, origWidth, origHeight);
+      }
+      rotatedCtx.drawImage(img, 0, 0);
+
       const needsResize = width > maxSize || height > maxSize;
 
       if (!needsResize) {
-        // No resize needed - draw directly
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          reject(new Error("Could not get canvas context"));
-          return;
-        }
-        ctx.drawImage(img, 0, 0);
-        resolve(ctx.getImageData(0, 0, width, height));
+        // No resize needed - return rotated image directly
+        resolve(rotatedCtx.getImageData(0, 0, width, height));
         return;
       }
 
       // Multi-step downscale for better quality (halve until close to target)
-      let srcCanvas = document.createElement("canvas");
-      srcCanvas.width = width;
-      srcCanvas.height = height;
-      let srcCtx = srcCanvas.getContext("2d");
-      if (!srcCtx) {
-        reject(new Error("Could not get canvas context"));
-        return;
-      }
-      srcCtx.drawImage(img, 0, 0);
+      let srcCanvas = rotatedCanvas;
 
       // Step down by halves until within 2x of target
       while (width > maxSize * 2 || height > maxSize * 2) {

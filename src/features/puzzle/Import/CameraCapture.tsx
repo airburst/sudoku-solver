@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Camera, Upload, X } from "lucide-react";
+import { Camera, Upload, X, Loader2 } from "lucide-react";
 import Button from "@/components/Button";
+import { processImageFile } from "@/services/ImageProcessor";
 
 interface CameraCaptureProps {
-  onCapture: (imageData: string) => void;
+  onCapture: (imageData: string, orientation?: number) => void;
   onCancel: () => void;
   error?: string | null;
 }
@@ -19,6 +20,7 @@ const CameraCapture = ({
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const stopCamera = useCallback(() => {
     if (stream) {
@@ -95,18 +97,30 @@ const CameraCapture = ({
   }, [stopCamera, onCapture]);
 
   const handleFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          stopCamera();
-          onCapture(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
+      setIsProcessing(true);
+
+      try {
+        // Process file: convert HEIC, extract orientation
+        const { dataUrl, orientation } = await processImageFile(file);
+        stopCamera();
+        onCapture(dataUrl, orientation);
+      } catch {
+        // Fallback to direct FileReader if processing fails
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === "string") {
+            stopCamera();
+            onCapture(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        setIsProcessing(false);
+      }
     },
     [stopCamera, onCapture],
   );
@@ -169,9 +183,16 @@ const CameraCapture = ({
 
       <canvas ref={canvasRef} className="hidden" />
 
+      {isProcessing && (
+        <div className="flex items-center justify-center gap-2 py-2">
+          <Loader2 size={20} className="animate-spin" />
+          <span className="text-sm text-stone-600">Processing image...</span>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-2 grid-rows-[4rem]">
         {!cameraError && isCameraReady && (
-          <Button primary onClick={capturePhoto} className="flex-1">
+          <Button primary onClick={capturePhoto} disabled={isProcessing} className="flex-1">
             <span className="flex items-center justify-center gap-2">
               <Camera size={20} />
               Capture
@@ -181,6 +202,7 @@ const CameraCapture = ({
 
         <Button
           onClick={() => fileInputRef.current?.click()}
+          disabled={isProcessing}
           className={cameraError || !isCameraReady ? "flex-1" : ""}
         >
           <span className="flex items-center justify-center gap-2">
@@ -192,7 +214,7 @@ const CameraCapture = ({
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,.heic,.heif"
           capture="environment"
           onChange={handleFileSelect}
           className="hidden"
