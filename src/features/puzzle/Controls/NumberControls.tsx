@@ -1,12 +1,6 @@
-import { Import, Save } from "lucide-react";
-import {
-  lockBoard,
-  setSelectedCellsNotes,
-  setSelectedCellsValue,
-} from "../puzzleSlice";
+import { setSelectedCellsNotes, setSelectedCellsValue } from "../puzzleSlice";
 import Button from "@/components/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { setImportState } from "@/features/import/importSlice";
 
 const NumberControls = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +25,7 @@ const NumberControls = () => {
 
   return (
     <div
-      className={`grid grid-cols-[repeat(5,3rem)] gap-2 grid-rows-[repeat(${gridRows},3rem)] mt-2 lg:mt-0 mx-auto`}
+      className={`grid grid-cols-[repeat(5,4rem)] gap-2 grid-rows-[repeat(${gridRows},4rem)] mt-2 lg:mt-0 mx-auto`}
     >
       <Button primary onClick={() => setValue(1)}>
         1
@@ -70,34 +64,6 @@ const NumberControls = () => {
         >
           X
         </Button>
-      )}
-
-      {/* Import and Save buttons - only in setup mode */}
-      {!locked && (
-        <>
-          <div>
-            <Button
-              primary
-              onClick={() => dispatch(setImportState("capturing"))}
-              className="flex items-center justify-center gap-2"
-              title="Import Puzzle"
-              aria-label="Import Puzzle"
-            >
-              <Import size={24} />
-            </Button>
-          </div>
-          <div className="col-start-3">
-            <Button
-              primary
-              onClick={() => dispatch(lockBoard())}
-              className="flex items-center justify-center gap-2"
-              title="Save Puzzle"
-              aria-label="Save Puzzle"
-            >
-              <Save size={24} />
-            </Button>
-          </div>
-        </>
       )}
     </div>
   );

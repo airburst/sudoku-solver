@@ -8,7 +8,7 @@ const Controls = () => {
 
   return (
     <div
-      className={`grid grid-cols-[repeat(5,3rem)] gap-2 grid-rows-[repeat(3,3rem)] mt-2 lg:mt-0 mx-auto`}
+      className={`grid grid-cols-[repeat(5,4rem)] gap-2 grid-rows-[repeat(3,3rem)] mt-2 lg:mt-0 mx-auto`}
     >
       {locked && (
         <>
