@@ -55,6 +55,8 @@ export interface PuzzleState {
   clock: number;
   /** Whether the game is paused */
   paused: boolean;
+  /** History of board states for undo */
+  history: Board[];
 }
 
 /**

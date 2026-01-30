@@ -1,20 +1,26 @@
-import { useAppSelector } from "@/hooks/redux";
 import NumberControls from "./NumberControls";
-import PlacementControls from "./PlacementControls";
-import GameControls from "./GameControls";
+import NotesToggle from "./NotesToggle";
+import UndoButton from "./UndoButton";
+import { useAppSelector } from "@/hooks/redux";
 
 const Controls = () => {
   const locked = useAppSelector((state) => state.puzzle.locked);
 
   return (
-    <div className="flex flex-col w-full">
-      <NumberControls />
+    <div
+      className={`grid grid-cols-[repeat(5,3rem)] gap-2 grid-rows-[repeat(3,3rem)] mt-2 lg:mt-0 mx-auto`}
+    >
       {locked && (
-        <div className="grid grid-cols-4 md:grid-cols-2 gap-2 mt-2">
-          <PlacementControls />
-          <GameControls />
-        </div>
+        <>
+          <div className="col-span-3">
+            <NotesToggle />
+          </div>
+          <div className="col-start-5">
+            <UndoButton />
+          </div>
+        </>
       )}
+      <NumberControls />
     </div>
   );
 };

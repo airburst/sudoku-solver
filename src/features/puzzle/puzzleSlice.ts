@@ -26,7 +26,13 @@ const initialState: PuzzleState = {
   isDragging: false,
   clock: 0,
   paused: false,
+  history: [],
 };
+
+const MAX_HISTORY = 50;
+
+const cloneBoard = (board: Board): Board =>
+  board.map((row) => row.map((cell) => ({ ...cell, notes: [...cell.notes] })));
 
 const nextCell = (
   row: number,
@@ -82,6 +88,11 @@ export const puzzleSlice = createSlice({
     },
 
     setSelectedCellsValue: (state, action: PayloadAction<number>) => {
+      // Save to history before making changes
+      if (!state.history) state.history = [];
+      state.history.push(cloneBoard(state.board));
+      if (state.history.length > MAX_HISTORY) state.history.shift();
+
       for (const [row, col] of state.selectedCells) {
         if (state.locked) {
           if (state.board[row][col].fixedVal === 0) {
@@ -110,6 +121,11 @@ export const puzzleSlice = createSlice({
     },
 
     setSelectedCellsNotes: (state, action: PayloadAction<number>) => {
+      // Save to history before making changes
+      if (!state.history) state.history = [];
+      state.history.push(cloneBoard(state.board));
+      if (state.history.length > MAX_HISTORY) state.history.shift();
+
       for (const [row, col] of state.selectedCells) {
         if (state.board[row][col].fixedVal > 0) {
           return;
@@ -173,9 +189,23 @@ export const puzzleSlice = createSlice({
       );
       state.clock = 0;
       state.paused = false;
+      state.history = [];
     },
 
     reset: () => initialState,
+
+    undo: (state) => {
+      if (!state.history) state.history = [];
+      const prev = state.history.pop();
+      if (prev) {
+        // Preserve selection state
+        const selectedCells = state.selectedCells;
+        state.board = prev;
+        for (const [r, c] of selectedCells) {
+          state.board[r][c].selected = true;
+        }
+      }
+    },
 
     incrementClock: (state) => {
       state.clock += 1;
@@ -203,6 +233,7 @@ export const {
   changeMode,
   restart,
   reset,
+  undo,
   setDragging,
   incrementClock,
   pause,
