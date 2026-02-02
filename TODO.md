@@ -1,4 +1,4 @@
 # TODO list
 
 - Stop clock when solved
-- Click anywhere on pause bar to pause
+- Integrate with API at https://sudoku-api.vercel.app/api/dosuku
